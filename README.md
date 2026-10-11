@@ -1,4 +1,4 @@
-# ManagedCode.TimePeriodLibrary
+# TimePeriodLibrary
 
 [![.NET](https://github.com/managedcode/TimePeriodLibrary/actions/workflows/dotnet.yml/badge.svg)](https://github.com/managedcode/TimePeriodLibrary/actions/workflows/dotnet.yml)
 [![Release](https://github.com/managedcode/TimePeriodLibrary/actions/workflows/release.yml/badge.svg)](https://github.com/managedcode/TimePeriodLibrary/actions/workflows/release.yml)
