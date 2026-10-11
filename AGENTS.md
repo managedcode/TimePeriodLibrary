@@ -42,3 +42,7 @@ CodeQL security-extended scans the exact library on pushes/PRs and weekly; revie
 Release qualification includes Linux and Windows. Publish only the exact qualified net10 package;
 verify NuGet's public payload (accounting for its signature) before creating the GitHub release or consuming it.
 Review the final diff and tests for independent expectations, boundary behavior and compatibility.
+
+## Feature layout
+
+Keep each calculation feature and its interfaces/helpers together: Periods, PeriodCollections, PeriodAlgorithms/Timeline, Calendars (Gregorian, Fiscal, Broadcast), BusinessTime, Clocks, Formatting, Primitives and Scheduling. Tests mirror these features; shared fixtures belong in TestSupport. Preserve the public ManagedCode.TimePeriodLibrary namespace across feature folders. Physical organization must not create a second assembly or duplicate compiled types. Resource files remain at the project root to preserve their manifest names. The desktop-only timeline implementation remains excluded through its exact new path.

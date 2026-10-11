@@ -20,7 +20,7 @@
     <FileVersion>10.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="TimeLineMomentCollection.Desktop.cs" />
+    <Compile Remove="PeriodAlgorithms/Timeline/TimeLineMomentCollection.Desktop.cs" />
     <None Include="../README.md" Pack="true" PackagePath="/" />
     <None Include="../LICENSE.md" Pack="true" PackagePath="/" />
   </ItemGroup>

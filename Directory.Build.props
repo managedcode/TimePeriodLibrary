@@ -7,7 +7,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <Deterministic>true</Deterministic>
     <Version>10.0.0</Version>
-    <PackageVersion>10.0.0</PackageVersion>
+    <PackageVersion>$(Version)</PackageVersion>
     <RepositoryUrl>https://github.com/managedcode/TimePeriodLibrary</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
