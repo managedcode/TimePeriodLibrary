@@ -1303,4 +1303,6 @@ To prevent problems with Visual Studio and some of its extension tools, it is ne
 
 ## Original authors and license
 
-The original Time Period Library was created by **Jani Giannoudis / Itenso**: [Giannoudis/TimePeriodLibrary](https://github.com/Giannoudis/TimePeriodLibrary). Original copyright headers and the [MIT license](LICENSE.md) are retained. ManagedCode maintains this edition for .NET 10.
+The original Time Period Library was created by **Jani Giannoudis / Itenso**: [Giannoudis/TimePeriodLibrary](https://github.com/Giannoudis/TimePeriodLibrary). 
+Original copyright headers and the [MIT license](LICENSE.md) are retained. 
+ManagedCode maintains this edition for .NET 10+.
