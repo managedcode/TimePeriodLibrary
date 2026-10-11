@@ -7,117 +7,117 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+public class Lesson : TimeBlock
 {
 
-    // ------------------------------------------------------------------------
-    public class Lesson : TimeBlock
+    // ----------------------------------------------------------------------
+    public static TimeSpan LessonDuration = TimePeriodLibrary.Duration.Minutes(50);
+
+    // ----------------------------------------------------------------------
+    public Lesson(DateTime moment) :
+        base(moment, LessonDuration)
     {
+    } // Lesson
 
-        // ----------------------------------------------------------------------
-        public static TimeSpan LessonDuration = TimePeriod.Duration.Minutes(50);
+} // class Lesson
 
-        // ----------------------------------------------------------------------
-        public Lesson(DateTime moment) :
-            base(moment, LessonDuration)
-        {
-        } // Lesson
+// ------------------------------------------------------------------------
+public class ShortBreak : TimeBlock
+{
 
-    } // class Lesson
+    // ----------------------------------------------------------------------
+    public static TimeSpan ShortBreakDuration = TimePeriodLibrary.Duration.Minutes(5);
 
-    // ------------------------------------------------------------------------
-    public class ShortBreak : TimeBlock
+    // ----------------------------------------------------------------------
+    public ShortBreak(DateTime moment) :
+        base(moment, ShortBreakDuration)
     {
+    } // ShortBreak
 
-        // ----------------------------------------------------------------------
-        public static TimeSpan ShortBreakDuration = TimePeriod.Duration.Minutes(5);
+} // class ShortBreak
 
-        // ----------------------------------------------------------------------
-        public ShortBreak(DateTime moment) :
-            base(moment, ShortBreakDuration)
-        {
-        } // ShortBreak
+// ------------------------------------------------------------------------
+public class LargeBreak : TimeBlock
+{
 
-    } // class ShortBreak
+    // ----------------------------------------------------------------------
+    public static TimeSpan LargeBreakDuration = TimePeriodLibrary.Duration.Minutes(15);
 
-    // ------------------------------------------------------------------------
-    public class LargeBreak : TimeBlock
+    // ----------------------------------------------------------------------
+    public LargeBreak(DateTime moment) :
+        base(moment, LargeBreakDuration)
     {
+    } // LargeBreak
 
-        // ----------------------------------------------------------------------
-        public static TimeSpan LargeBreakDuration = TimePeriod.Duration.Minutes(15);
-
-        // ----------------------------------------------------------------------
-        public LargeBreak(DateTime moment) :
-            base(moment, LargeBreakDuration)
-        {
-        } // LargeBreak
-
-    } // class LargeBreak
+} // class LargeBreak
 
 
-    // ------------------------------------------------------------------------
-    public class SchoolDay : TimePeriodChain
+// ------------------------------------------------------------------------
+public class SchoolDay : TimePeriodChain
+{
+
+    // ----------------------------------------------------------------------
+    public SchoolDay(IClock clock = null) :
+        this(GetDefaultStartDate(clock))
     {
+    } // SchoolDay
 
-        // ----------------------------------------------------------------------
-        public SchoolDay(IClock clock = null) :
-            this(GetDefaultStartDate(clock))
-        {
-        } // SchoolDay
+    // ----------------------------------------------------------------------
+    public SchoolDay(DateTime moment)
+    {
+        Lesson1 = new Lesson(moment);
+        Break1 = new ShortBreak(moment);
+        Lesson2 = new Lesson(moment);
+        Break2 = new LargeBreak(moment);
+        Lesson3 = new Lesson(moment);
+        Break3 = new ShortBreak(moment);
+        Lesson4 = new Lesson(moment);
 
-        // ----------------------------------------------------------------------
-        public SchoolDay(DateTime moment)
-        {
-            Lesson1 = new Lesson(moment);
-            Break1 = new ShortBreak(moment);
-            Lesson2 = new Lesson(moment);
-            Break2 = new LargeBreak(moment);
-            Lesson3 = new Lesson(moment);
-            Break3 = new ShortBreak(moment);
-            Lesson4 = new Lesson(moment);
+        base.Add(Lesson1);
+        base.Add(Break1);
+        base.Add(Lesson2);
+        base.Add(Break2);
+        base.Add(Lesson3);
+        base.Add(Break3);
+        base.Add(Lesson4);
+    } // SchoolDay
 
-            base.Add(Lesson1);
-            base.Add(Break1);
-            base.Add(Lesson2);
-            base.Add(Break2);
-            base.Add(Lesson3);
-            base.Add(Break3);
-            base.Add(Lesson4);
-        } // SchoolDay
+    // ----------------------------------------------------------------------
+    public Lesson Lesson1 { get; }
 
-        // ----------------------------------------------------------------------
-        public Lesson Lesson1 { get; }
+    // ----------------------------------------------------------------------
+    public ShortBreak Break1 { get; }
 
-        // ----------------------------------------------------------------------
-        public ShortBreak Break1 { get; }
+    // ----------------------------------------------------------------------
+    public Lesson Lesson2 { get; }
 
-        // ----------------------------------------------------------------------
-        public Lesson Lesson2 { get; }
+    // ----------------------------------------------------------------------
+    public LargeBreak Break2 { get; }
 
-        // ----------------------------------------------------------------------
-        public LargeBreak Break2 { get; }
+    // ----------------------------------------------------------------------
+    public Lesson Lesson3 { get; }
 
-        // ----------------------------------------------------------------------
-        public Lesson Lesson3 { get; }
+    // ----------------------------------------------------------------------
+    public ShortBreak Break3 { get; }
 
-        // ----------------------------------------------------------------------
-        public ShortBreak Break3 { get; }
+    // ----------------------------------------------------------------------
+    public Lesson Lesson4 { get; }
 
-        // ----------------------------------------------------------------------
-        public Lesson Lesson4 { get; }
+    // ----------------------------------------------------------------------
+    private static DateTime GetDefaultStartDate(IClock clock)
+    {
+        clock ??= ClockProxy.Clock;
+        var now = clock.Now;
+        return new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+    } // GetDefaultStartDate
 
-        // ----------------------------------------------------------------------
-        private static DateTime GetDefaultStartDate(IClock clock)
-        {
-            clock ??= ClockProxy.Clock;
-            var now = clock.Now;
-            return new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
-        } // GetDefaultStartDate
+} // class SchoolDay
 
-    } // class SchoolDay
-
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

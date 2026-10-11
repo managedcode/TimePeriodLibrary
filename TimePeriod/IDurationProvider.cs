@@ -8,17 +8,17 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface IDurationProvider
 {
 
-	// ------------------------------------------------------------------------
-	public interface IDurationProvider
-	{
+    // ----------------------------------------------------------------------
+    TimeSpan GetDuration(DateTime start, DateTime end);
 
-		// ----------------------------------------------------------------------
-		TimeSpan GetDuration( DateTime start, DateTime end );
+} // interface IDurationProvider
 
-	} // interface IDurationProvider
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -8,26 +8,26 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimePeriodChain : ITimePeriodContainer
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimePeriodChain : ITimePeriodContainer
-	{
+    // ----------------------------------------------------------------------
+    new DateTime Start { get; set; }
 
-		// ----------------------------------------------------------------------
-		new DateTime Start { get; set; }
+    // ----------------------------------------------------------------------
+    new DateTime End { get; set; }
 
-		// ----------------------------------------------------------------------
-		new DateTime End { get; set; }
+    // ----------------------------------------------------------------------
+    ITimePeriod First { get; }
 
-		// ----------------------------------------------------------------------
-		ITimePeriod First { get; }
+    // ----------------------------------------------------------------------
+    ITimePeriod Last { get; }
 
-		// ----------------------------------------------------------------------
-		ITimePeriod Last { get; }
+} // interface ITimePeriodChain
 
-	} // interface ITimePeriodChain
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum YearHalfyear
 {
+    First = 1,
+    Second = 2,
+} // enum YearHalfyear
 
-	// ------------------------------------------------------------------------
-	public enum YearHalfyear
-	{
-		First = 1,
-		Second = 2,
-	} // enum YearHalfyear
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

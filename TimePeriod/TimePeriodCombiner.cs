@@ -8,47 +8,47 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class TimePeriodCombiner<T> where T : ITimePeriod, new()
 {
 
-	// ------------------------------------------------------------------------
-	public class TimePeriodCombiner<T> where T : ITimePeriod, new()
-	{
+    // ----------------------------------------------------------------------
+    public TimePeriodCombiner() :
+        this(null)
+    {
+    } // TimePeriodCombiner
 
-		// ----------------------------------------------------------------------
-		public TimePeriodCombiner() :
-			this( null )
-		{
-		} // TimePeriodCombiner
+    // ----------------------------------------------------------------------
+    public TimePeriodCombiner(ITimePeriodMapper periodMapper)
+    {
+        this.periodMapper = periodMapper;
+    } // TimePeriodCombiner
 
-		// ----------------------------------------------------------------------
-		public TimePeriodCombiner( ITimePeriodMapper periodMapper )
-		{
-			this.periodMapper = periodMapper;
-		} // TimePeriodCombiner
+    // ----------------------------------------------------------------------
+    public ITimePeriodMapper PeriodMapper
+    {
+        get { return periodMapper; }
+    } // PeriodMapper
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodMapper PeriodMapper
-		{
-			get { return periodMapper; }
-		} // PeriodMapper
+    // ----------------------------------------------------------------------
+    public virtual ITimePeriodCollection CombinePeriods(ITimePeriodContainer periods)
+    {
+        if (periods == null)
+        {
+            throw new ArgumentNullException("periods");
+        }
+        TimeLine<T> timeLine = new TimeLine<T>(periods, periodMapper);
+        return timeLine.CombinePeriods();
+    } // CombinePeriods
 
-		// ----------------------------------------------------------------------
-		public virtual ITimePeriodCollection CombinePeriods( ITimePeriodContainer periods )
-		{
-			if ( periods == null )
-			{
-				throw new ArgumentNullException( "periods" );
-			}
-			TimeLine<T> timeLine = new TimeLine<T>( periods, periodMapper );
-			return timeLine.CombinePeriods();
-		} // CombinePeriods
+    // ----------------------------------------------------------------------
+    // members
+    private readonly ITimePeriodMapper periodMapper;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly ITimePeriodMapper periodMapper;
+} // class TimePeriodCombiner
 
-	} // class TimePeriodCombiner
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

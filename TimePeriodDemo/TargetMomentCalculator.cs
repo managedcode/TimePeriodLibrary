@@ -7,63 +7,63 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class TargetMomentCalculator : TimeLinePeriodEvaluator
 {
 
-	// ------------------------------------------------------------------------
-	public class TargetMomentCalculator : TimeLinePeriodEvaluator
-	{
+    // ----------------------------------------------------------------------
+    public TargetMomentCalculator(ITimePeriodContainer periods, TimeSpan duration) :
+        base(periods)
+    {
+        if (duration == null)
+        {
+            throw new ArgumentNullException("duration");
+        }
+        this.duration = duration;
+    } // TargetMomentCalculator
 
-		// ----------------------------------------------------------------------
-		public TargetMomentCalculator( ITimePeriodContainer periods, TimeSpan duration ) :
-			base( periods )
-		{
-			if ( duration == null )
-			{
-				throw new ArgumentNullException( "duration" );
-			}
-			this.duration = duration;
-		} // TargetMomentCalculator
+    // ----------------------------------------------------------------------
+    public TimeSpan Duration
+    {
+        get { return duration; }
+    } // Duration
 
-		// ----------------------------------------------------------------------
-		public TimeSpan Duration
-		{
-			get { return duration; }
-		} // Duration
+    // ----------------------------------------------------------------------
+    public DateTime? GetTargetMoment()
+    {
+        targetMoment = null;
+        remainingDuration = duration;
+        StartEvaluation();
+        return targetMoment;
+    } // GetTargetMoment
 
-		// ----------------------------------------------------------------------
-		public DateTime? GetTargetMoment()
-		{
-			targetMoment = null;
-			remainingDuration = duration;
-			StartEvaluation();
-			return targetMoment;
-		} // GetTargetMoment
+    // ----------------------------------------------------------------------
+    protected override bool EvaluatePeriod(ITimePeriod period, int periodCount)
+    {
+        TimeSpan allPeriodDuration = new TimeSpan(period.Duration.Ticks * periodCount);
 
-		// ----------------------------------------------------------------------
-		protected override bool EvaluatePeriod( ITimePeriod period, int periodCount )
-		{
-			TimeSpan allPeriodDuration = new TimeSpan( period.Duration.Ticks * periodCount );
+        if (allPeriodDuration >= remainingDuration)
+        {
+            targetMoment = period.Start.Add(new TimeSpan(remainingDuration.Ticks / periodCount));
+            return false;
+        }
 
-			if ( allPeriodDuration >= remainingDuration )
-			{
-				targetMoment = period.Start.Add( new TimeSpan( remainingDuration.Ticks / periodCount ) );
-				return false;
-			}
+        remainingDuration = remainingDuration.Subtract(allPeriodDuration);
+        return true;
+    } // EvaluatePeriod
 
-			remainingDuration = remainingDuration.Subtract( allPeriodDuration );
-			return true;
-		} // EvaluatePeriod
+    // ----------------------------------------------------------------------
+    // members
+    private readonly TimeSpan duration;
+    private TimeSpan remainingDuration;
+    private DateTime? targetMoment;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly TimeSpan duration;
-		private TimeSpan remainingDuration;
-		private DateTime? targetMoment;
+} // TargetMomentCalculator
 
-	} // TargetMomentCalculator
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

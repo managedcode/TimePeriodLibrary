@@ -8,64 +8,64 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public struct DayRange
 {
 
-	// ------------------------------------------------------------------------
-	public struct DayRange
-	{
+    // ----------------------------------------------------------------------
+    public DayRange(int day) :
+        this(day, day)
+    {
+    } // DayRange
 
-		// ----------------------------------------------------------------------
-		public DayRange( int day ) :
-			this( day, day )
-		{
-		} // DayRange
+    // ----------------------------------------------------------------------
+    public DayRange(int min, int max)
+    {
+        if (min < 1 || min > TimeSpec.MaxDaysPerMonth)
+        {
+            throw new ArgumentOutOfRangeException("min");
+        }
+        if (max < min || max > TimeSpec.MaxDaysPerMonth)
+        {
+            throw new ArgumentOutOfRangeException("max");
+        }
+        this.min = min;
+        this.max = max;
+    } // DayRange
 
-		// ----------------------------------------------------------------------
-		public DayRange( int min, int max )
-		{
-			if ( min < 1 || min > TimeSpec.MaxDaysPerMonth )
-			{
-				throw new ArgumentOutOfRangeException( "min" );
-			}
-			if ( max < min || max > TimeSpec.MaxDaysPerMonth )
-			{
-				throw new ArgumentOutOfRangeException( "max" );
-			}
-			this.min = min;
-			this.max = max;
-		} // DayRange
+    // ----------------------------------------------------------------------
+    public int Min
+    {
+        get { return min; }
+    } // Min
 
-		// ----------------------------------------------------------------------
-		public int Min
-		{
-			get { return min; }
-		} // Min
+    // ----------------------------------------------------------------------
+    public int Max
+    {
+        get { return max; }
+    } // Max
 
-		// ----------------------------------------------------------------------
-		public int Max
-		{
-			get { return max; }
-		} // Max
+    // ----------------------------------------------------------------------
+    public bool IsSingleDay
+    {
+        get { return min == max; }
+    } // IsSingleDay
 
-		// ----------------------------------------------------------------------
-		public bool IsSingleDay
-		{
-			get { return min == max; }
-		} // IsSingleDay
+    // ----------------------------------------------------------------------
+    public bool HasInside(int test)
+    {
+        return test >= min && test <= max;
+    } // HasInside
 
-		// ----------------------------------------------------------------------
-		public bool HasInside( int test )
-		{
-			return test >= min && test <= max;
-		} // HasInside
+    // ----------------------------------------------------------------------
+    // members
+    private readonly int min;
+    private readonly int max;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly int min;
-		private readonly int max;
+} // struct DayRange
 
-	} // struct DayRange
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

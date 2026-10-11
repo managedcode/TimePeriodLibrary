@@ -8,111 +8,111 @@
 // --------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+public class TimeRangePeriodRelationTestData
 {
 
-    // ------------------------------------------------------------------------
-    public class TimeRangePeriodRelationTestData
+    // ----------------------------------------------------------------------
+    public TimeRangePeriodRelationTestData(DateTime start, DateTime end, TimeSpan offset)
     {
-
-        // ----------------------------------------------------------------------
-        public TimeRangePeriodRelationTestData(DateTime start, DateTime end, TimeSpan offset)
+        if (offset <= TimeSpan.Zero)
         {
-            if (offset <= TimeSpan.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-            Reference = new TimeRange(start, end, true);
+            throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+        Reference = new TimeRange(start, end, true);
 
-            var beforeEnd = start.Subtract(offset);
-            var beforeStart = beforeEnd.Subtract(Reference.Duration);
-            var insideStart = start.Add(offset);
-            var insideEnd = end.Subtract(offset);
-            var afterStart = end.Add(offset);
-            var afterEnd = afterStart.Add(Reference.Duration);
+        var beforeEnd = start.Subtract(offset);
+        var beforeStart = beforeEnd.Subtract(Reference.Duration);
+        var insideStart = start.Add(offset);
+        var insideEnd = end.Subtract(offset);
+        var afterStart = end.Add(offset);
+        var afterEnd = afterStart.Add(Reference.Duration);
 
-            After = new TimeRange(beforeStart, beforeEnd, true);
-            StartTouching = new TimeRange(beforeStart, start, true);
-            StartInside = new TimeRange(beforeStart, insideStart, true);
-            InsideStartTouching = new TimeRange(start, afterStart, true);
-            EnclosingStartTouching = new TimeRange(start, insideEnd, true);
-            Enclosing = new TimeRange(insideStart, insideEnd, true);
-            EnclosingEndTouching = new TimeRange(insideStart, end, true);
-            ExactMatch = new TimeRange(start, end, true);
-            Inside = new TimeRange(beforeStart, afterEnd, true);
-            InsideEndTouching = new TimeRange(beforeStart, end, true);
-            EndInside = new TimeRange(insideEnd, afterEnd, true);
-            EndTouching = new TimeRange(end, afterEnd, true);
-            Before = new TimeRange(afterStart, afterEnd, true);
+        After = new TimeRange(beforeStart, beforeEnd, true);
+        StartTouching = new TimeRange(beforeStart, start, true);
+        StartInside = new TimeRange(beforeStart, insideStart, true);
+        InsideStartTouching = new TimeRange(start, afterStart, true);
+        EnclosingStartTouching = new TimeRange(start, insideEnd, true);
+        Enclosing = new TimeRange(insideStart, insideEnd, true);
+        EnclosingEndTouching = new TimeRange(insideStart, end, true);
+        ExactMatch = new TimeRange(start, end, true);
+        Inside = new TimeRange(beforeStart, afterEnd, true);
+        InsideEndTouching = new TimeRange(beforeStart, end, true);
+        EndInside = new TimeRange(insideEnd, afterEnd, true);
+        EndTouching = new TimeRange(end, afterEnd, true);
+        Before = new TimeRange(afterStart, afterEnd, true);
 
-            allPeriods.Add(Reference);
-            allPeriods.Add(After);
-            allPeriods.Add(StartTouching);
-            allPeriods.Add(StartInside);
-            allPeriods.Add(InsideStartTouching);
-            allPeriods.Add(EnclosingStartTouching);
-            allPeriods.Add(Enclosing);
-            allPeriods.Add(EnclosingEndTouching);
-            allPeriods.Add(ExactMatch);
-            allPeriods.Add(Inside);
-            allPeriods.Add(InsideEndTouching);
-            allPeriods.Add(EndInside);
-            allPeriods.Add(EndTouching);
-            allPeriods.Add(Before);
-        } // TimeRangePeriodRelationTestData
+        allPeriods.Add(Reference);
+        allPeriods.Add(After);
+        allPeriods.Add(StartTouching);
+        allPeriods.Add(StartInside);
+        allPeriods.Add(InsideStartTouching);
+        allPeriods.Add(EnclosingStartTouching);
+        allPeriods.Add(Enclosing);
+        allPeriods.Add(EnclosingEndTouching);
+        allPeriods.Add(ExactMatch);
+        allPeriods.Add(Inside);
+        allPeriods.Add(InsideEndTouching);
+        allPeriods.Add(EndInside);
+        allPeriods.Add(EndTouching);
+        allPeriods.Add(Before);
+    } // TimeRangePeriodRelationTestData
 
-        // ----------------------------------------------------------------------
-        public ICollection<ITimePeriod> AllPeriods => allPeriods; // AllPeriods
+    // ----------------------------------------------------------------------
+    public ICollection<ITimePeriod> AllPeriods => allPeriods; // AllPeriods
 
-        // ----------------------------------------------------------------------
-        public ITimeRange Reference { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange Reference { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange Before { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange Before { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange StartTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange StartTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange StartInside { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange StartInside { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange InsideStartTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange InsideStartTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange EnclosingStartTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange EnclosingStartTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange Inside { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange Inside { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange EnclosingEndTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange EnclosingEndTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange ExactMatch { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange ExactMatch { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange Enclosing { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange Enclosing { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange InsideEndTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange InsideEndTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange EndInside { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange EndInside { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange EndTouching { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange EndTouching { get; }
 
-        // ----------------------------------------------------------------------
-        public ITimeRange After { get; }
+    // ----------------------------------------------------------------------
+    public ITimeRange After { get; }
 
-        // ----------------------------------------------------------------------
-        // members
-        private readonly List<ITimePeriod> allPeriods = new();
+    // ----------------------------------------------------------------------
+    // members
+    private readonly List<ITimePeriod> allPeriods = new();
 
-    } // class TimeRangePeriodRelationTestData
+} // class TimeRangePeriodRelationTestData
 
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

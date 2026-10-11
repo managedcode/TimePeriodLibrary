@@ -1,0 +1,13 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/TimePeriod.Benchmarks/TimePeriod.Benchmarks.csproj" />
+  </Folder>
+  <Project Path="TimePeriod/TimePeriod.csproj" />
+  <Project Path="TimePeriodDemo/TimePeriodDemo.csproj" />
+  <Project Path="TimePeriodTests/TimePeriodTests.Core.csproj" />
+</Solution>

@@ -7,72 +7,72 @@
 // copyright  : (c) 2011-2013 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class ComparableTimeRange : TimeRange, IComparable
 {
 
-	// ------------------------------------------------------------------------
-	public class ComparableTimeRange : TimeRange, IComparable
-	{
+    // ----------------------------------------------------------------------
+    public ComparableTimeRange() :
+        this(TimeSpec.MinPeriodDate, TimeSpec.MaxPeriodDate)
+    {
+    } // ComparableTimeRange
 
-		// ----------------------------------------------------------------------
-		public ComparableTimeRange() :
-			this( TimeSpec.MinPeriodDate, TimeSpec.MaxPeriodDate )
-		{
-		} // ComparableTimeRange
+    // ----------------------------------------------------------------------
+    public ComparableTimeRange(DateTime start, DateTime end, bool isReadOnly = false) :
+        base(start, end, isReadOnly)
+    {
+    } // ComparableTimeRange
 
-		// ----------------------------------------------------------------------
-		public ComparableTimeRange( DateTime start, DateTime end, bool isReadOnly = false ) :
-			base( start, end, isReadOnly )
-		{
-		} // ComparableTimeRange
+    // ----------------------------------------------------------------------
+    public ComparableTimeRange(DateTime start, TimeSpan duration, bool isReadOnly = false) :
+        base(start, duration, isReadOnly)
+    {
+    } // ComparableTimeRange
 
-		// ----------------------------------------------------------------------
-		public ComparableTimeRange( DateTime start, TimeSpan duration, bool isReadOnly = false ) :
-			base( start, duration, isReadOnly )
-		{
-		} // ComparableTimeRange
+    // ----------------------------------------------------------------------
+    public ComparableTimeRange(ITimePeriod copy) :
+        base(copy)
+    {
+    } // ComparableTimeRange
 
-		// ----------------------------------------------------------------------
-		public ComparableTimeRange( ITimePeriod copy ) :
-			base( copy )
-		{
-		} // ComparableTimeRange
+    // ----------------------------------------------------------------------
+    public int CompareTo(object obj)
+    {
+        if (obj == null)
+        {
+            throw new ArgumentNullException("obj");
+        }
 
-		// ----------------------------------------------------------------------
-		public int CompareTo( object obj )
-		{
-			if ( obj == null )
-			{
-				throw new ArgumentNullException( "obj" );
-			}
+        //return CompareDuration( obj as ITimePeriod );
+        return CompareStart(obj as ITimePeriod);
+    } // CompareTo
 
-			//return CompareDuration( obj as ITimePeriod );
-			return CompareStart( obj as ITimePeriod );
-		} // CompareTo
+    // ----------------------------------------------------------------------
+    public int CompareStart(ITimePeriod compare)
+    {
+        if (compare == null)
+        {
+            throw new ArgumentNullException("compare");
+        }
+        return Start.CompareTo(compare.Start);
+    } // CompareStart
 
-		// ----------------------------------------------------------------------
-		public int CompareStart( ITimePeriod compare )
-		{
-			if ( compare == null )
-			{
-				throw new ArgumentNullException( "compare" );
-			}
-			return Start.CompareTo( compare.Start );
-		} // CompareStart
+    // ----------------------------------------------------------------------
+    public int CompareDuration(ITimePeriod compare)
+    {
+        if (compare == null)
+        {
+            throw new ArgumentNullException("compare");
+        }
+        return Duration.CompareTo(compare.Duration);
+    } // CompareDuration
 
-		// ----------------------------------------------------------------------
-		public int CompareDuration( ITimePeriod compare )
-		{
-			if ( compare == null )
-			{
-				throw new ArgumentNullException( "compare" );
-			}
-			return Duration.CompareTo( compare.Duration );
-		} // CompareDuration
+} // class ComparableTimeRange
 
-	} // class ComparableTimeRange
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum DurationFormatType
 {
+    Compact,
+    Detailed,
+} // enum DurationFormatType
 
-	// ------------------------------------------------------------------------
-	public enum DurationFormatType
-	{
-		Compact,
-		Detailed,
-	} // enum DurationFormatType
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

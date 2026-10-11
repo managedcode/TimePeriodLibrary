@@ -7,54 +7,54 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 using Xunit;
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+
+public sealed class TimeLineTest : TestUnitBase
 {
 
-    // ------------------------------------------------------------------------
-
-    public sealed class TimeLineTest : TestUnitBase
+    // ----------------------------------------------------------------------
+    [Trait("Category", "TimeLine")]
+    [Fact]
+    public void TimeRangeCombinedPeriodsTest()
     {
+        var periods = new TimePeriodCollection();
+        var date1 = ClockProxy.Clock.Now;
+        var date2 = date1.AddDays(1);
+        var date3 = date2.AddDays(1);
+        periods.Add(new TimeRange(date1, date2));
+        periods.Add(new TimeRange(date2, date3));
 
-        // ----------------------------------------------------------------------
-        [Trait("Category", "TimeLine")]
-        [Fact]
-        public void TimeRangeCombinedPeriodsTest()
-        {
-            var periods = new TimePeriodCollection();
-            var date1 = ClockProxy.Clock.Now;
-            var date2 = date1.AddDays(1);
-            var date3 = date2.AddDays(1);
-            periods.Add(new TimeRange(date1, date2));
-            periods.Add(new TimeRange(date2, date3));
+        var timeLine = new TimeLine<TimeRange>(periods, null, null);
+        var combinedPeriods = timeLine.CombinePeriods();
+        Assert.Single(combinedPeriods);
+        Assert.Equal(new TimeRange(date1, date3), combinedPeriods[0]);
+    } // TimeRangeCombinedPeriodsTest
 
-            var timeLine = new TimeLine<TimeRange>(periods, null, null);
-            var combinedPeriods = timeLine.CombinePeriods();
-            Assert.Single(combinedPeriods);
-            Assert.Equal(new TimeRange(date1, date3), combinedPeriods[0]);
-        } // TimeRangeCombinedPeriodsTest
+    // ----------------------------------------------------------------------
+    [Trait("Category", "TimeLine")]
+    [Fact]
+    public void TimeBlockCombinedPeriodsTest()
+    {
+        var periods = new TimePeriodCollection();
+        var date1 = ClockProxy.Clock.Now;
+        var date2 = date1.AddDays(1);
+        var date3 = date2.AddDays(1);
+        periods.Add(new TimeBlock(date1, date2));
+        periods.Add(new TimeBlock(date2, date3));
 
-        // ----------------------------------------------------------------------
-        [Trait("Category", "TimeLine")]
-        [Fact]
-        public void TimeBlockCombinedPeriodsTest()
-        {
-            var periods = new TimePeriodCollection();
-            var date1 = ClockProxy.Clock.Now;
-            var date2 = date1.AddDays(1);
-            var date3 = date2.AddDays(1);
-            periods.Add(new TimeBlock(date1, date2));
-            periods.Add(new TimeBlock(date2, date3));
+        var timeLine = new TimeLine<TimeRange>(periods, null, null);
+        var combinedPeriods = timeLine.CombinePeriods();
+        Assert.Single(combinedPeriods);
+        Assert.Equal(new TimeRange(date1, date3), combinedPeriods[0]);
+    } // TimeBlockCombinedPeriodsTest
 
-            var timeLine = new TimeLine<TimeRange>(periods, null, null);
-            var combinedPeriods = timeLine.CombinePeriods();
-            Assert.Single(combinedPeriods);
-            Assert.Equal(new TimeRange(date1, date3), combinedPeriods[0]);
-        } // TimeBlockCombinedPeriodsTest
+} // class TimeLineTest
 
-    } // class TimeLineTest
-
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

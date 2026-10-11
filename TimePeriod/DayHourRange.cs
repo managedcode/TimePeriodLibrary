@@ -8,51 +8,51 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class DayHourRange : HourRange
 {
 
-	// ------------------------------------------------------------------------
-	public class DayHourRange : HourRange
-	{
+    // ----------------------------------------------------------------------
+    public DayHourRange(DayOfWeek day, int hour) :
+        base(hour, hour)
+    {
+        this.day = day;
+    } // DayHourRange
 
-		// ----------------------------------------------------------------------
-		public DayHourRange( DayOfWeek day, int hour ) :
-			base( hour, hour )
-		{
-			this.day = day;
-		} // DayHourRange
+    // ----------------------------------------------------------------------
+    public DayHourRange(DayOfWeek day, int startHour, int endHour) :
+        base(new Time(startHour), new Time(endHour))
+    {
+        this.day = day;
+    } // DayHourRange
 
-		// ----------------------------------------------------------------------
-		public DayHourRange( DayOfWeek day, int startHour, int endHour ) :
-			base( new Time( startHour ), new Time( endHour ) )
-		{
-			this.day = day;
-		} // DayHourRange
+    // ----------------------------------------------------------------------
+    public DayHourRange(DayOfWeek day, Time start, Time end) :
+        base(start, end)
+    {
+        this.day = day;
+    } // DayHourRange
 
-		// ----------------------------------------------------------------------
-		public DayHourRange( DayOfWeek day, Time start, Time end ) :
-			base( start, end )
-		{
-			this.day = day;
-		} // DayHourRange
+    // ----------------------------------------------------------------------
+    public DayOfWeek Day
+    {
+        get { return day; }
+    } // Day
 
-		// ----------------------------------------------------------------------
-		public DayOfWeek Day
-		{
-			get { return day; }
-		} // Day
+    // ----------------------------------------------------------------------
+    public override string ToString()
+    {
+        return Day + ": " + base.ToString();
+    } // ToString
 
-		// ----------------------------------------------------------------------
-		public override string ToString()
-		{
-			return Day + ": " + base.ToString();
-		} // ToString
+    // ----------------------------------------------------------------------
+    // members
+    private readonly DayOfWeek day;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly DayOfWeek day;
+} // class DayHourRange
 
-	} // class DayHourRange
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

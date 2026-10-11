@@ -1,0 +1,30 @@
+name: CodeQL
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    - cron: '27 4 * * 1'
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.401'
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+          build-mode: manual
+          queries: security-extended
+      - name: Build extracted library
+        run: dotnet build TimePeriod/TimePeriod.csproj --configuration Release --no-incremental --verbosity quiet
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:csharp

@@ -6,28 +6,28 @@
 // environment: .NET 2.0
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class FiscalTimeCalendar : TimeCalendar
 {
 
-	// ------------------------------------------------------------------------
-	public class FiscalTimeCalendar : TimeCalendar
-	{
+    // ----------------------------------------------------------------------
+    public FiscalTimeCalendar()
+        : base(
+            new TimeCalendarConfig
+            {
+                YearBaseMonth = YearMonth.October,  //  October year base month
+                YearWeekType = YearWeekType.Iso8601, // ISO 8601 week numbering
+                YearType = YearType.FiscalYear// treat years as fiscal years
+            })
+    {
+    } // FiscalTimeCalendar
 
-		// ----------------------------------------------------------------------
-		public FiscalTimeCalendar()
-			: base(
-				new TimeCalendarConfig
-				{
-					YearBaseMonth = YearMonth.October,  //  October year base month
-					YearWeekType = YearWeekType.Iso8601, // ISO 8601 week numbering
-					YearType = YearType.FiscalYear// treat years as fiscal years
-				} )
-		{
-		} // FiscalTimeCalendar
+} // class FiscalTimeCalendar
 
-	} // class FiscalTimeCalendar
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

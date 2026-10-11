@@ -7,16 +7,16 @@
 // copyright  : (c) 2011-2014 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum FiscalYearAlignment
 {
+    None,
+    LastDay,
+    NearestDay,
+} // enum FiscalYearAlignment
 
-	// ------------------------------------------------------------------------
-	public enum FiscalYearAlignment
-	{
-		None,
-		LastDay,
-		NearestDay,
-	} // enum FiscalYearAlignment
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

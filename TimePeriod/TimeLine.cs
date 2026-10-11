@@ -9,407 +9,407 @@
 using System;
 using System.Collections.Generic;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class TimeLine<T> : ITimeLine where T : ITimePeriod, new()
 {
 
-	// ------------------------------------------------------------------------
-	public class TimeLine<T> : ITimeLine where T : ITimePeriod, new()
-	{
+    // ----------------------------------------------------------------------
+    public TimeLine(ITimePeriodContainer periods, ITimePeriodMapper periodMapper = null) :
+        this(periods, null, periodMapper)
+    {
+    } // TimeLine
 
-		// ----------------------------------------------------------------------
-		public TimeLine( ITimePeriodContainer periods, ITimePeriodMapper periodMapper = null ) :
-			this( periods, null, periodMapper )
-		{
-		} // TimeLine
+    // ----------------------------------------------------------------------
+    public TimeLine(ITimePeriodContainer periods, ITimePeriod limits = null, ITimePeriodMapper periodMapper = null)
+    {
+        if (periods == null)
+        {
+            throw new ArgumentNullException("periods");
+        }
 
-		// ----------------------------------------------------------------------
-		public TimeLine( ITimePeriodContainer periods, ITimePeriod limits = null, ITimePeriodMapper periodMapper = null )
-		{
-			if ( periods == null )
-			{
-				throw new ArgumentNullException( "periods" );
-			}
+        this.limits = limits != null ? new TimeRange(limits) : new TimeRange(periods);
+        this.periods = periods;
+        this.periodMapper = periodMapper;
+    } // TimeLine
 
-			this.limits = limits != null ? new TimeRange( limits ) : new TimeRange( periods );
-			this.periods = periods;
-			this.periodMapper = periodMapper;
-		} // TimeLine
+    // ----------------------------------------------------------------------
+    public ITimePeriodContainer Periods
+    {
+        get { return periods; }
+    } // Periods
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodContainer Periods
-		{
-			get { return periods; }
-		} // Periods
+    // ----------------------------------------------------------------------
+    public ITimePeriod Limits
+    {
+        get { return limits; }
+    } // Limits
 
-		// ----------------------------------------------------------------------
-		public ITimePeriod Limits
-		{
-			get { return limits; }
-		} // Limits
+    // ----------------------------------------------------------------------
+    public ITimePeriodMapper PeriodMapper
+    {
+        get { return periodMapper; }
+    } // PeriodMapper
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodMapper PeriodMapper
-		{
-			get { return periodMapper; }
-		} // PeriodMapper
-
-		// ----------------------------------------------------------------------
-		private bool HasNonMomentPeriods
-		{
-			get
+    // ----------------------------------------------------------------------
+    private bool HasNonMomentPeriods
+    {
+        get
+        {
+            foreach (ITimePeriod period in periods)
             {
-                foreach (ITimePeriod period in periods)
+                if (!period.IsMoment)
                 {
-                    if (!period.IsMoment)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                return false;
             }
-        } // HasNonEmptyPeriods
+            return false;
+        }
+    } // HasNonEmptyPeriods
 
-        // ----------------------------------------------------------------------
-        public bool HasOverlaps()
-		{
-			return GetTimeLineMoments().HasOverlaps();
-		} // HasOverlaps
+    // ----------------------------------------------------------------------
+    public bool HasOverlaps()
+    {
+        return GetTimeLineMoments().HasOverlaps();
+    } // HasOverlaps
 
-		// ----------------------------------------------------------------------
-		public bool HasGaps()
-		{
-			return GetTimeLineMoments().HasGaps();
-		} // HasGaps
+    // ----------------------------------------------------------------------
+    public bool HasGaps()
+    {
+        return GetTimeLineMoments().HasGaps();
+    } // HasGaps
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodCollection CombinePeriods()
-		{
-            if ( periods.Count == 0 || ( periods.Count > 1 && !HasNonMomentPeriods ) )
+    // ----------------------------------------------------------------------
+    public ITimePeriodCollection CombinePeriods()
+    {
+        if (periods.Count == 0 || (periods.Count > 1 && !HasNonMomentPeriods))
+        {
+            return new TimePeriodCollection();
+        }
+
+        ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments();
+        return timeLineMoments.Count == 0 ? new TimePeriodCollection { new TimeRange(periods) } : CombinePeriods(timeLineMoments);
+    } // CombinePeriods
+
+    // ----------------------------------------------------------------------
+    public ITimePeriodCollection IntersectPeriods(bool combinePeriods = true)
+    {
+        if (periods.Count == 0 || (periods.Count > 1 && !HasNonMomentPeriods))
+        {
+            return new TimePeriodCollection();
+        }
+
+        ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments();
+        if (timeLineMoments.Count == 0)
+        {
+            return new TimePeriodCollection();
+        }
+
+        return combinePeriods ? IntersectCombinedPeriods(timeLineMoments) : IntersectPeriods(timeLineMoments);
+    } // IntersectPeriods
+
+    // ----------------------------------------------------------------------
+    public ITimePeriodCollection CalculateGaps()
+    {
+        // exclude periods
+        TimePeriodCollection gapPeriods = new TimePeriodCollection();
+        foreach (ITimePeriod period in periods)
+        {
+            if (limits.IntersectsWith(period))
             {
-                return new TimePeriodCollection();
-			}
+                gapPeriods.Add(new TimeRange(period));
+            }
+        }
 
-			ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments();
-			return timeLineMoments.Count == 0 ? new TimePeriodCollection { new TimeRange( periods ) } : CombinePeriods( timeLineMoments );
-		} // CombinePeriods
+        ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments(gapPeriods);
+        if (timeLineMoments.Count == 0)
+        {
+            return new TimePeriodCollection { limits };
+        }
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodCollection IntersectPeriods( bool combinePeriods = true )
-		{
-            if ( periods.Count == 0 || ( periods.Count > 1 && !HasNonMomentPeriods ) )
+        T range = new T();
+        range.Setup(MapPeriodStart(limits.Start), MapPeriodEnd(limits.End));
+        return CalculateGaps(range, timeLineMoments);
+    } // CalculateGaps
+
+    // ----------------------------------------------------------------------
+    private ITimeLineMomentCollection GetTimeLineMoments()
+    {
+        return GetTimeLineMoments(periods);
+    } // GetTimeLineMoments
+
+    // ----------------------------------------------------------------------
+    private ITimeLineMomentCollection GetTimeLineMoments(ICollection<ITimePeriod> momentPeriods)
+    {
+        TimeLineMomentCollection timeLineMoments = new TimeLineMomentCollection();
+
+        if (momentPeriods.Count == 0)
+        {
+            return timeLineMoments;
+        }
+
+        // setup gap set with all start/end points
+        ITimePeriodCollection intersections = new TimePeriodCollection();
+        foreach (ITimePeriod momentPeriod in momentPeriods)
+        {
+            if (momentPeriod.IsMoment)
             {
-                return new TimePeriodCollection();
+                continue;
             }
 
-            ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments();
-			if ( timeLineMoments.Count == 0 )
-			{
-				return new TimePeriodCollection();
-			}
+            // calculate the intersection between the periods
+            ITimeRange intersection = limits.GetIntersection(momentPeriod);
+            if (intersection == null || intersection.IsMoment)
+            {
+                continue;
+            }
 
-			return combinePeriods ? IntersectCombinedPeriods( timeLineMoments ) : IntersectPeriods( timeLineMoments );
-		} // IntersectPeriods
+            if (periodMapper != null)
+            {
+                intersection = new TimeRange(MapPeriodStart(intersection.Start), MapPeriodEnd(intersection.End));
+            }
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodCollection CalculateGaps()
-		{
-			// exclude periods
-			TimePeriodCollection gapPeriods = new TimePeriodCollection();
-			foreach ( ITimePeriod period in periods )
-			{
-				if ( limits.IntersectsWith( period ) )
-				{
-					gapPeriods.Add( new TimeRange( period ) );
-				}
-			}
+            intersections.Add(intersection);
+        }
 
-			ITimeLineMomentCollection timeLineMoments = GetTimeLineMoments( gapPeriods );
-			if ( timeLineMoments.Count == 0 )
-			{
-				return new TimePeriodCollection { limits };
-			}
+        timeLineMoments.AddAll(intersections);
+        return timeLineMoments;
+    } // GetTimeLineMoments
 
-			T range = new T();
-			range.Setup( MapPeriodStart( limits.Start ), MapPeriodEnd( limits.End ) );
-			return CalculateGaps( range, timeLineMoments );
-		} // CalculateGaps
+    // ----------------------------------------------------------------------
+    private static ITimePeriodCollection CombinePeriods(ITimeLineMomentCollection timeLineMoments)
+    {
+        TimePeriodCollection periods = new TimePeriodCollection();
+        if (timeLineMoments.IsEmpty)
+        {
+            return periods;
+        }
 
-		// ----------------------------------------------------------------------
-		private ITimeLineMomentCollection GetTimeLineMoments()
-		{
-			return GetTimeLineMoments( periods );
-		} // GetTimeLineMoments
+        // search for periods
+        int itemIndex = 0;
+        while (itemIndex < timeLineMoments.Count)
+        {
+            ITimeLineMoment periodStart = timeLineMoments[itemIndex];
+            int startCount = periodStart.StartCount;
+            if (startCount == 0)
+            {
+                throw new InvalidOperationException();
+            }
 
-		// ----------------------------------------------------------------------
-		private ITimeLineMomentCollection GetTimeLineMoments( ICollection<ITimePeriod> momentPeriods )
-		{
-			TimeLineMomentCollection timeLineMoments = new TimeLineMomentCollection();
+            // search next period end
+            // use balancing to handle overlapping periods
+            int balance = startCount;
+            ITimeLineMoment periodEnd = null;
+            while (itemIndex < timeLineMoments.Count - 1 && balance > 0)
+            {
+                itemIndex++;
+                periodEnd = timeLineMoments[itemIndex];
+                balance += periodEnd.BalanceCount;
+            }
 
-			if ( momentPeriods.Count == 0 )
-			{
-				return timeLineMoments;
-			}
+            if (periodEnd == null)
+            {
+                throw new InvalidOperationException();
+            }
 
-			// setup gap set with all start/end points
-			ITimePeriodCollection intersections = new TimePeriodCollection();
-			foreach ( ITimePeriod momentPeriod in momentPeriods )
-			{
-				if ( momentPeriod.IsMoment )
-				{
-					continue;
-				}
+            if (periodEnd.StartCount > 0) // touching
+            {
+                itemIndex++;
+                continue;
+            }
 
-				// calculate the intersection between the periods
-				ITimeRange intersection = limits.GetIntersection( momentPeriod );
-				if ( intersection == null || intersection.IsMoment )
-				{
-					continue;
-				}
+            // found a period
+            if (itemIndex < timeLineMoments.Count)
+            {
+                T period = new T();
+                period.Setup(periodStart.Moment, periodEnd.Moment);
+                periods.Add(period);
+            }
 
-				if ( periodMapper != null )
-				{
-					intersection = new TimeRange( MapPeriodStart( intersection.Start ), MapPeriodEnd( intersection.End ) );
-				}
+            itemIndex++;
+        }
 
-				intersections.Add( intersection );
-			}
+        return periods;
+    } // CombinePeriods
 
-			timeLineMoments.AddAll( intersections );
-			return timeLineMoments;
-		} // GetTimeLineMoments
+    // ----------------------------------------------------------------------
+    private static ITimePeriodCollection IntersectCombinedPeriods(ITimeLineMomentCollection timeLineMoments)
+    {
+        TimePeriodCollection periods = new TimePeriodCollection();
+        if (timeLineMoments.IsEmpty)
+        {
+            return periods;
+        }
 
-		// ----------------------------------------------------------------------
-		private static ITimePeriodCollection CombinePeriods( ITimeLineMomentCollection timeLineMoments )
-		{
-			TimePeriodCollection periods = new TimePeriodCollection();
-			if ( timeLineMoments.IsEmpty )
-			{
-				return periods;
-			}
+        // search for periods
+        int intersectionStart = -1;
+        int balance = 0;
+        for (int i = 0; i < timeLineMoments.Count; i++)
+        {
+            ITimeLineMoment moment = timeLineMoments[i];
 
-			// search for periods
-			int itemIndex = 0;
-			while ( itemIndex < timeLineMoments.Count )
-			{
-				ITimeLineMoment periodStart = timeLineMoments[ itemIndex ];
-				int startCount = periodStart.StartCount;
-				if ( startCount == 0 )
-				{
-					throw new InvalidOperationException();
-				}
+            int startCount = moment.StartCount;
+            int endCount = moment.EndCount;
+            balance += startCount;
+            balance -= endCount;
 
-				// search next period end
-				// use balancing to handle overlapping periods
-				int balance = startCount;
-				ITimeLineMoment periodEnd = null;
-				while ( itemIndex < timeLineMoments.Count - 1 && balance > 0 )
-				{
-					itemIndex++;
-					periodEnd = timeLineMoments[ itemIndex ];
-					balance += periodEnd.BalanceCount;
-				}
+            // intersection is starting by a period start
+            if (startCount > 0 && balance > 1 && intersectionStart < 0)
+            {
+                intersectionStart = i;
+                continue;
+            }
 
-				if ( periodEnd == null )
-				{
-					throw new InvalidOperationException();
-				}
+            // intersection is starting by a period end
+            if (endCount <= 0 || balance > 1 || intersectionStart < 0)
+            {
+                continue;
+            }
 
-				if ( periodEnd.StartCount > 0 ) // touching
-				{
-					itemIndex++;
-					continue;
-				}
+            T period = new T();
+            period.Setup(timeLineMoments[intersectionStart].Moment, moment.Moment);
+            periods.Add(period);
+            intersectionStart = -1;
+        }
 
-				// found a period
-				if ( itemIndex < timeLineMoments.Count )
-				{
-					T period = new T();
-					period.Setup( periodStart.Moment, periodEnd.Moment );
-					periods.Add( period );
-				}
+        return periods;
+    } // IntersectCombinedPeriods
 
-				itemIndex++;
-			}
+    // ----------------------------------------------------------------------
+    private static ITimePeriodCollection IntersectPeriods(ITimeLineMomentCollection timeLineMoments)
+    {
+        TimePeriodCollection periods = new TimePeriodCollection();
+        if (timeLineMoments.IsEmpty)
+        {
+            return periods;
+        }
 
-			return periods;
-		} // CombinePeriods
+        // search for periods
+        int intersectionStart = -1;
+        int balance = 0;
+        for (int i = 0; i < timeLineMoments.Count; i++)
+        {
+            ITimeLineMoment moment = timeLineMoments[i];
 
-		// ----------------------------------------------------------------------
-		private static ITimePeriodCollection IntersectCombinedPeriods( ITimeLineMomentCollection timeLineMoments )
-		{
-			TimePeriodCollection periods = new TimePeriodCollection();
-			if ( timeLineMoments.IsEmpty )
-			{
-				return periods;
-			}
+            balance += moment.BalanceCount;
 
-			// search for periods
-			int intersectionStart = -1;
-			int balance = 0;
-			for ( int i = 0; i < timeLineMoments.Count; i++ )
-			{
-				ITimeLineMoment moment = timeLineMoments[ i ];
+            // intersection is starting by a period start
+            if (balance > 1 && intersectionStart < 0)
+            {
+                intersectionStart = i;
+                continue;
+            }
 
-				int startCount = moment.StartCount;
-				int endCount = moment.EndCount;
-				balance += startCount;
-				balance -= endCount;
+            // intersection is starting by a period end
+            if (intersectionStart < 0)
+            {
+                continue;
+            }
 
-				// intersection is starting by a period start
-				if ( startCount > 0 && balance > 1 && intersectionStart < 0 )
-				{
-					intersectionStart = i;
-					continue;
-				}
+            T period = new T();
+            period.Setup(timeLineMoments[intersectionStart].Moment, moment.Moment);
+            periods.Add(period);
+            intersectionStart = balance > 1 ? i : -1;
+        }
 
-				// intersection is starting by a period end
-				if ( endCount <= 0 || balance > 1 || intersectionStart < 0 )
-				{
-					continue;
-				}
+        return periods;
+    } // IntersectCombinedPeriods
 
-				T period = new T();
-				period.Setup( timeLineMoments[ intersectionStart ].Moment, moment.Moment );
-				periods.Add( period );
-				intersectionStart = -1;
-			}
+    // ----------------------------------------------------------------------
+    private static ITimePeriodCollection CalculateGaps(ITimePeriod range, ITimeLineMomentCollection timeLineMoments)
+    {
+        TimePeriodCollection gaps = new TimePeriodCollection();
+        if (timeLineMoments.IsEmpty)
+        {
+            return gaps;
+        }
 
-			return periods;
-		} // IntersectCombinedPeriods
+        // range leading gap
+        ITimeLineMoment periodStart = timeLineMoments.Min;
+        if (periodStart != null && range.Start < periodStart.Moment)
+        {
+            T startingGap = new T();
+            startingGap.Setup(range.Start, periodStart.Moment);
+            gaps.Add(startingGap);
+        }
 
-		// ----------------------------------------------------------------------
-		private static ITimePeriodCollection IntersectPeriods( ITimeLineMomentCollection timeLineMoments )
-		{
-			TimePeriodCollection periods = new TimePeriodCollection();
-			if ( timeLineMoments.IsEmpty )
-			{
-				return periods;
-			}
+        // search for gaps
+        int itemIndex = 0;
+        while (itemIndex < timeLineMoments.Count)
+        {
+            ITimeLineMoment moment = timeLineMoments[itemIndex];
+            int startCount = moment.StartCount;
+            if (startCount == 0)
+            {
+                throw new InvalidOperationException();
+            }
 
-			// search for periods
-			int intersectionStart = -1;
-			int balance = 0;
-			for ( int i = 0; i < timeLineMoments.Count; i++ )
-			{
-				ITimeLineMoment moment = timeLineMoments[ i ];
+            // search next gap start
+            // use balancing to handle overlapping periods
+            int balance = startCount;
+            ITimeLineMoment gapStart = null;
+            while (itemIndex < timeLineMoments.Count - 1 && balance > 0)
+            {
+                itemIndex++;
+                gapStart = timeLineMoments[itemIndex];
+                balance += gapStart.BalanceCount;
+            }
 
-				balance += moment.BalanceCount;
+            if (gapStart == null)
+            {
+                throw new InvalidOperationException();
+            }
 
-				// intersection is starting by a period start
-				if ( balance > 1 && intersectionStart < 0 )
-				{
-					intersectionStart = i;
-					continue;
-				}
+            if (gapStart.StartCount > 0) // touching
+            {
+                itemIndex++;
+                continue;
+            }
 
-				// intersection is starting by a period end
-				if ( intersectionStart < 0 )
-				{
-					continue;
-				}
+            // found a gap
+            if (itemIndex < timeLineMoments.Count - 1)
+            {
+                T gap = new T();
+                gap.Setup(gapStart.Moment, timeLineMoments[itemIndex + 1].Moment);
+                gaps.Add(gap);
+            }
 
-				T period = new T();
-				period.Setup( timeLineMoments[ intersectionStart ].Moment, moment.Moment );
-				periods.Add( period );
-				intersectionStart = balance > 1 ? i : -1;
-			}
+            itemIndex++;
+        }
 
-			return periods;
-		} // IntersectCombinedPeriods
+        // range closing gap
+        ITimeLineMoment periodEnd = timeLineMoments.Max;
+        if (periodEnd != null && range.End > periodEnd.Moment)
+        {
+            T endingGap = new T();
+            endingGap.Setup(periodEnd.Moment, range.End);
+            gaps.Add(endingGap);
+        }
 
-		// ----------------------------------------------------------------------
-		private static ITimePeriodCollection CalculateGaps( ITimePeriod range, ITimeLineMomentCollection timeLineMoments )
-		{
-			TimePeriodCollection gaps = new TimePeriodCollection();
-			if ( timeLineMoments.IsEmpty )
-			{
-				return gaps;
-			}
+        return gaps;
+    } // CalculateGaps
 
-			// range leading gap
-			ITimeLineMoment periodStart = timeLineMoments.Min;
-			if ( periodStart != null && range.Start < periodStart.Moment )
-			{
-				T startingGap = new T();
-				startingGap.Setup( range.Start, periodStart.Moment );
-				gaps.Add( startingGap );
-			}
+    // ----------------------------------------------------------------------
+    private DateTime MapPeriodStart(DateTime start)
+    {
+        return periodMapper != null ? periodMapper.UnmapStart(start) : start;
+    } // MapPeriodStart
 
-			// search for gaps
-			int itemIndex = 0;
-			while ( itemIndex < timeLineMoments.Count )
-			{
-				ITimeLineMoment moment = timeLineMoments[ itemIndex ];
-				int startCount = moment.StartCount;
-				if ( startCount == 0 )
-				{
-					throw new InvalidOperationException();
-				}
+    // ----------------------------------------------------------------------
+    private DateTime MapPeriodEnd(DateTime end)
+    {
+        return periodMapper != null ? periodMapper.UnmapEnd(end) : end;
+    } // MapPeriodEnd
 
-				// search next gap start
-				// use balancing to handle overlapping periods
-				int balance = startCount;
-				ITimeLineMoment gapStart = null;
-				while ( itemIndex < timeLineMoments.Count - 1 && balance > 0 )
-				{
-					itemIndex++;
-					gapStart = timeLineMoments[ itemIndex ];
-					balance += gapStart.BalanceCount;
-				}
+    // ----------------------------------------------------------------------
+    // members
+    private readonly ITimeRange limits;
+    private readonly ITimePeriodContainer periods;
+    private readonly ITimePeriodMapper periodMapper;
 
-				if ( gapStart == null )
-				{
-					throw new InvalidOperationException();
-				}
+} // class TimeLine
 
-				if ( gapStart.StartCount > 0 ) // touching
-				{
-					itemIndex++;
-					continue;
-				}
-
-				// found a gap
-				if ( itemIndex < timeLineMoments.Count - 1 )
-				{
-					T gap = new T();
-					gap.Setup( gapStart.Moment, timeLineMoments[ itemIndex + 1 ].Moment );
-					gaps.Add( gap );
-				}
-
-				itemIndex++;
-			}
-
-			// range closing gap
-			ITimeLineMoment periodEnd = timeLineMoments.Max;
-			if ( periodEnd != null && range.End > periodEnd.Moment )
-			{
-				T endingGap = new T();
-				endingGap.Setup( periodEnd.Moment, range.End );
-				gaps.Add( endingGap );
-			}
-
-			return gaps;
-		} // CalculateGaps
-
-		// ----------------------------------------------------------------------
-		private DateTime MapPeriodStart( DateTime start )
-		{
-			return periodMapper != null ? periodMapper.UnmapStart( start ) : start;
-		} // MapPeriodStart
-
-		// ----------------------------------------------------------------------
-		private DateTime MapPeriodEnd( DateTime end )
-		{
-			return periodMapper != null ? periodMapper.UnmapEnd( end ) : end;
-		} // MapPeriodEnd
-
-		// ----------------------------------------------------------------------
-		// members
-		private readonly ITimeRange limits;
-		private readonly ITimePeriodContainer periods;
-		private readonly ITimePeriodMapper periodMapper;
-
-	} // class TimeLine
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

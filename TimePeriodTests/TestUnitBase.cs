@@ -7,13 +7,13 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+public abstract class TestUnitBase
 {
+} // class TestUnitBase
 
-    // ------------------------------------------------------------------------
-    public abstract class TestUnitBase
-    {
-    } // class TestUnitBase
-
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

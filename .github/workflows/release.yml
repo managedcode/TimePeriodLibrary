@@ -1,0 +1,69 @@
+name: Release
+on:
+  push:
+    branches: [master]
+    paths:
+      - Directory.Build.props
+  workflow_dispatch:
+concurrency:
+  group: timeperiod-release
+  cancel-in-progress: false
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  qualify:
+    uses: ./.github/workflows/dotnet.yml
+  security:
+    uses: ./.github/workflows/codeql-analysis.yml
+  release:
+    needs: [qualify, security]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.401'
+      - name: Pack exact source
+        run: |
+          mkdir -p artifacts/release
+          git rev-parse HEAD > artifacts/release/source.txt
+          dotnet --info > artifacts/release/runtime.txt
+          dotnet pack TimePeriod/TimePeriod.csproj --configuration Release --output artifacts/release --verbosity quiet
+          python3 scripts/verify-package.py artifacts/release
+      - name: Publish package and verify public payload
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          set -euo pipefail
+          version=$(python3 -c "import xml.etree.ElementTree as E; print(E.parse('Directory.Build.props').find('.//Version').text)")
+          dotnet nuget push "artifacts/release/ManagedCode.TimePeriodLibrary.${version}.nupkg" --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
+          python3 scripts/verify-public-package.py artifacts/release
+      - name: Create source-bound GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(python3 -c "import xml.etree.ElementTree as E; print(E.parse('Directory.Build.props').find('.//Version').text)")
+          tag="v${version}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            test "$(gh api repos/${GITHUB_REPOSITORY}/git/ref/tags/${tag} --jq .object.sha)" = "$GITHUB_SHA"
+          else
+            notes="docs/release-${version}.md"
+            if [[ -f "$notes" ]]; then
+              gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --notes-file "$notes" artifacts/release/*.nupkg artifacts/release/*.snupkg
+            else
+              gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --generate-notes artifacts/release/*.nupkg artifacts/release/*.snupkg
+            fi
+          fi
+      - name: Retain publication receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/release/
+          if-no-files-found: error
+          retention-days: 90

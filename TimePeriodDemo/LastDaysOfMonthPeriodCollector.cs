@@ -6,34 +6,34 @@
 // environment: .NET 2.0
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class LastDaysOfMonthPeriodCollector : CalendarPeriodCollector
 {
 
-	// ------------------------------------------------------------------------
-	public class LastDaysOfMonthPeriodCollector : CalendarPeriodCollector
-	{
+    // ------------------------------------------------------------------------
+    public LastDaysOfMonthPeriodCollector(CalendarPeriodCollectorFilter filter, ITimePeriod limits) :
+        base(filter, limits)
+    {
+    } // LastDaysOfMonthPeriodCollector
 
-		// ------------------------------------------------------------------------
-		public LastDaysOfMonthPeriodCollector( CalendarPeriodCollectorFilter filter, ITimePeriod limits ) :
-			base( filter, limits )
-		{
-		} // LastDaysOfMonthPeriodCollector
+    // ----------------------------------------------------------------------
+    protected override bool OnVisitDay(Day day, CalendarPeriodCollectorContext context)
+    {
+        // allow only the last day of the month
+        if (day.Month == day.AddDays(TimeSpec.DaysPerWeek).Month)
+        {
+            return false;
+        }
 
-		// ----------------------------------------------------------------------
-		protected override bool OnVisitDay( Day day, CalendarPeriodCollectorContext context )
-		{
-			// allow only the last day of the month
-			if ( day.Month == day.AddDays( TimeSpec.DaysPerWeek ).Month )
-			{
-				return false;
-			}
+        return base.OnVisitDay(day, context);
+    } // OnVisitDay
 
-			return base.OnVisitDay( day, context );
-		} // OnVisitDay
+} // class LastDaysOfMonthPeriodCollector
 
-	} // class LastDaysOfMonthPeriodCollector
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

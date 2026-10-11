@@ -8,62 +8,62 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class TimePeriodExamples
 {
 
-	// ------------------------------------------------------------------------
-	public class TimePeriodDemo
-	{
+    // ----------------------------------------------------------------------
+    protected static void Write(string text)
+    {
+        ConsoleTool.Write(text);
+    } // Write
 
-		// ----------------------------------------------------------------------
-		protected static void Write( string text )
-		{
-			ConsoleTool.Write( text );
-		} // Write
+    // ----------------------------------------------------------------------
+    protected static void Write(string format, params object[] args)
+    {
+        ConsoleTool.Write(format, args);
+    } // Write
 
-		// ----------------------------------------------------------------------
-		protected static void Write( string format, params object[] args )
-		{
-			ConsoleTool.Write( format, args );
-		} // Write
+    // ----------------------------------------------------------------------
+    protected static void WriteLine(string text)
+    {
+        ConsoleTool.WriteLine(text);
+    } // WriteLine
 
-		// ----------------------------------------------------------------------
-		protected static void WriteLine( string text )
-		{
-			ConsoleTool.WriteLine( text );
-		} // WriteLine
+    // ----------------------------------------------------------------------
+    protected static void WriteLine(string format, params object[] args)
+    {
+        ConsoleTool.WriteLine(format, args);
+    } // WriteLine
 
-		// ----------------------------------------------------------------------
-		protected static void WriteLine( string format, params object[] args )
-		{
-			ConsoleTool.WriteLine( format, args );
-		} // WriteLine
+    // ----------------------------------------------------------------------
+    protected static void WriteLine()
+    {
+        ConsoleTool.WriteLine();
+    } // WriteLine
 
-		// ----------------------------------------------------------------------
-		protected static void WriteLine()
-		{
-			ConsoleTool.WriteLine();
-		} // WriteLine
+    // ----------------------------------------------------------------------
+    protected static void WriteIndentLine(string text)
+    {
+        ConsoleTool.WriteIndentLine(text);
+    } // WriteIndentLine
 
-		// ----------------------------------------------------------------------
-		protected static void WriteIndentLine( string text )
-		{
-			ConsoleTool.WriteIndentLine( text );
-		} // WriteIndentLine
+    // ----------------------------------------------------------------------
+    protected static void WriteIndentLine(string format, params object[] args)
+    {
+        ConsoleTool.WriteIndentLine(format, args);
+    } // WriteIndentLine
 
-		// ----------------------------------------------------------------------
-		protected static void WriteIndentLine( string format, params object[] args )
-		{
-			ConsoleTool.WriteIndentLine( format, args );
-		} // WriteIndentLine
+    // ----------------------------------------------------------------------
+    protected static string Format(DateTime dateTime, bool compact = true)
+    {
+        return ConsoleTool.Format(dateTime, compact);
+    } // Format
 
-		// ----------------------------------------------------------------------
-		protected static string Format( DateTime dateTime, bool compact = true )
-		{
-			return ConsoleTool.Format( dateTime, compact );
-		} // Format
+} // class TimePeriodDemo
 
-	} // class TimePeriodDemo
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

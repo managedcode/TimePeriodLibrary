@@ -7,38 +7,38 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimeLine
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimeLine
-	{
+    // ----------------------------------------------------------------------
+    ITimePeriodContainer Periods { get; }
 
-		// ----------------------------------------------------------------------
-		ITimePeriodContainer Periods { get; }
+    // ----------------------------------------------------------------------
+    ITimePeriod Limits { get; }
 
-		// ----------------------------------------------------------------------
-		ITimePeriod Limits { get; }
+    // ----------------------------------------------------------------------
+    ITimePeriodMapper PeriodMapper { get; }
 
-		// ----------------------------------------------------------------------
-		ITimePeriodMapper PeriodMapper { get; }
+    // ----------------------------------------------------------------------
+    bool HasOverlaps();
 
-		// ----------------------------------------------------------------------
-		bool HasOverlaps();
+    // ----------------------------------------------------------------------
+    bool HasGaps();
 
-		// ----------------------------------------------------------------------
-		bool HasGaps();
+    // ----------------------------------------------------------------------
+    ITimePeriodCollection CombinePeriods();
 
-		// ----------------------------------------------------------------------
-		ITimePeriodCollection CombinePeriods();
+    // ----------------------------------------------------------------------
+    ITimePeriodCollection IntersectPeriods(bool combinePeriods);
 
-		// ----------------------------------------------------------------------
-		ITimePeriodCollection IntersectPeriods( bool combinePeriods );
+    // ----------------------------------------------------------------------
+    ITimePeriodCollection CalculateGaps();
 
-		// ----------------------------------------------------------------------
-		ITimePeriodCollection CalculateGaps();
+} // interface ITimeLine
 
-	} // interface ITimeLine
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -7,38 +7,38 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 using Xunit;
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+
+public sealed class CalendarTimeRangeTest : TestUnitBase
 {
 
-    // ------------------------------------------------------------------------
-
-    public sealed class CalendarTimeRangeTest : TestUnitBase
+    // ----------------------------------------------------------------------
+    [Trait("Category", "CalendarTimeRange")]
+    [Fact]
+    public void CalendarTest()
     {
+        var calendar = new TimeCalendar();
+        var calendarTimeRange = new CalendarTimeRange(TimeRange.Anytime, calendar);
+        Assert.Equal(calendarTimeRange.Calendar, calendar);
+    } // CalendarTest
 
-        // ----------------------------------------------------------------------
-        [Trait("Category", "CalendarTimeRange")]
-        [Fact]
-        public void CalendarTest()
-        {
-            var calendar = new TimeCalendar();
-            var calendarTimeRange = new CalendarTimeRange(TimeRange.Anytime, calendar);
-            Assert.Equal(calendarTimeRange.Calendar, calendar);
-        } // CalendarTest
+    // ----------------------------------------------------------------------
+    [Trait("Category", "CalendarTimeRange")]
+    [Fact]
+    public void MomentTest()
+    {
+        var testDate = new DateTime(2000, 10, 1);
+        Assert.NotNull(Assert.Throws<NotSupportedException>(() =>
+            new CalendarTimeRange(testDate, testDate)));
+    } // MomentTest
 
-        // ----------------------------------------------------------------------
-        [Trait("Category", "CalendarTimeRange")]
-        [Fact]
-        public void MomentTest()
-        {
-            var testDate = new DateTime(2000, 10, 1);
-            Assert.NotNull(Assert.Throws<NotSupportedException>(() =>
-                new CalendarTimeRange(testDate, testDate)));
-        } // MomentTest
+} // class CalendarTimeRangeTest
 
-    } // class CalendarTimeRangeTest
-
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

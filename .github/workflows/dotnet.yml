@@ -1,0 +1,35 @@
+name: .NET
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.401'
+      - name: Restore
+        run: dotnet restore ManagedCode.TimePeriodLibrary.slnx
+      - name: Verify formatting
+        run: dotnet format whitespace ManagedCode.TimePeriodLibrary.slnx --verify-no-changes --no-restore --verbosity quiet
+      - name: Build and analyze
+        run: dotnet build ManagedCode.TimePeriodLibrary.slnx --configuration Release --no-restore --verbosity quiet
+      - name: Test and collect coverage
+        run: dotnet test TimePeriodTests/TimePeriodTests.Core.csproj --configuration Release --no-build --logger "trx;LogFileName=tests.trx" --collect "XPlat Code Coverage" --results-directory artifacts/tests
+      - name: Retain test and coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qualification-${{ matrix.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/tests/
+          if-no-files-found: error

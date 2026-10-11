@@ -8,24 +8,24 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+[AttributeUsage(AttributeTargets.Method)]
+internal class SampleAttribute : Attribute
 {
 
-	// ------------------------------------------------------------------------
-	[AttributeUsage( AttributeTargets.Method )]
-	internal class SampleAttribute : Attribute
-	{
+    // ----------------------------------------------------------------------
+    public SampleAttribute(string group)
+    {
+        Group = group;
+    } // SampleAttribute
 
-		// ----------------------------------------------------------------------
-		public SampleAttribute( string group )
-		{
-			Group = group;
-		} // SampleAttribute
+    // ----------------------------------------------------------------------
+    public string Group { get; set; }
 
-		// ----------------------------------------------------------------------
-		public string Group { get; set; }
+} // class SampleAttribute
 
-	} // class SampleAttribute
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

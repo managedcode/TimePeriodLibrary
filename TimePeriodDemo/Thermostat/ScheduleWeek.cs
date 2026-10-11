@@ -9,58 +9,58 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo.Thermostat
+namespace ManagedCode.TimePeriodDemo.Thermostat;
+
+
+// ------------------------------------------------------------------------
+public class ScheduleWeek<T> where T : class, ITimePeriod, new()
 {
 
-	// ------------------------------------------------------------------------
-	public class ScheduleWeek<T>  where T : class, ITimePeriod, new()
-	{
+    // ----------------------------------------------------------------------
+    public ScheduleWeek()
+    {
+        Setup();
+    } // ScheduleWeek
 
-		// ----------------------------------------------------------------------
-		public ScheduleWeek()
-		{
-			Setup();
-		} // ScheduleWeek
+    // ----------------------------------------------------------------------
+    public ScheduleDay<T> this[DayOfWeek dayOfWeek]
+    {
+        get { return days[dayOfWeek]; }
+    } // this[]
 
-		// ----------------------------------------------------------------------
-		public ScheduleDay<T> this[ DayOfWeek dayOfWeek ]
-		{
-			get { return days[ dayOfWeek ]; }
-		} // this[]
+    // ----------------------------------------------------------------------
+    public IEnumerable Days
+    {
+        get { return days.Values; }
+    } // Days
 
-		// ----------------------------------------------------------------------
-		public IEnumerable Days
-		{
-			get { return days.Values; }
-		} // Days
+    // ----------------------------------------------------------------------
+    public ITimePeriod GetWeekPeriod(DateTime moment)
+    {
+        DateTime weekStart = new Week(moment).Start;
+        DateTime weekEnd = weekStart.AddDays(TimeSpec.DaysPerWeek);
 
-		// ----------------------------------------------------------------------
-		public ITimePeriod GetWeekPeriod( DateTime moment )
-		{
-			DateTime weekStart = new Week( moment ).Start;
-			DateTime weekEnd = weekStart.AddDays( TimeSpec.DaysPerWeek );
-		
-			T week = new T();
-			week.Setup( weekStart, weekEnd );
-			return week;
-		} // GetWeekPeriod
+        T week = new T();
+        week.Setup(weekStart, weekEnd);
+        return week;
+    } // GetWeekPeriod
 
-		// ----------------------------------------------------------------------
-		private void Setup()
-		{
-			foreach ( DayOfWeek dayOfWeek in Enum.GetValues( typeof( DayOfWeek ) ) )
-			{
-				days.Add( dayOfWeek, new ScheduleDay<T>( dayOfWeek ) );
-			}
-		} // Setup
+    // ----------------------------------------------------------------------
+    private void Setup()
+    {
+        foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
+        {
+            days.Add(dayOfWeek, new ScheduleDay<T>(dayOfWeek));
+        }
+    } // Setup
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly Dictionary<DayOfWeek,ScheduleDay<T>> days = new Dictionary<DayOfWeek,ScheduleDay<T>>();
+    // ----------------------------------------------------------------------
+    // members
+    private readonly Dictionary<DayOfWeek, ScheduleDay<T>> days = new Dictionary<DayOfWeek, ScheduleDay<T>>();
 
-	} // class ScheduleWeek
+} // class ScheduleWeek
 
-} // namespace Itenso.TimePeriodDemo.Thermostat
+// namespace Itenso.TimePeriodDemo.Thermostat
 // -- EOF -------------------------------------------------------------------

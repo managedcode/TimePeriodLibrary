@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum SeekBoundaryMode
 {
+    Fill,
+    Next,
+} // enum SeekBoundaryMode
 
-	// ------------------------------------------------------------------------
-	public enum SeekBoundaryMode
-	{
-		Fill,
-		Next,
-	} // enum SeekBoundaryMode
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

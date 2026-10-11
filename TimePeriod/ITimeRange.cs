@@ -8,53 +8,67 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+/// <summary>A period with independent start and end bounds; moving one bound changes duration.</summary>
+public interface ITimeRange : ITimePeriod
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimeRange : ITimePeriod
-	{
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets start while keeping end fixed.</summary>
+    new DateTime Start { get; set; }
 
-		// ----------------------------------------------------------------------
-		new DateTime Start { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets end while keeping start fixed.</summary>
+    new DateTime End { get; set; }
 
-		// ----------------------------------------------------------------------
-		new DateTime End { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets duration from the current start, adjusting end.</summary>
+    new TimeSpan Duration { get; set; }
 
-		// ----------------------------------------------------------------------
-		new TimeSpan Duration { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Shifts both bounds without changing duration.</summary>
+    void Move(TimeSpan offset);
 
-		// ----------------------------------------------------------------------
-		void Move( TimeSpan offset );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves start earlier only when the moment precedes it.</summary>
+    void ExpandStartTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandStartTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves end later only when the moment follows it.</summary>
+    void ExpandEndTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandEndTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Expands bounds to contain a moment.</summary>
+    void ExpandTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Expands bounds to contain another period.</summary>
+    void ExpandTo(ITimePeriod period);
 
-		// ----------------------------------------------------------------------
-		void ExpandTo( ITimePeriod period );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves start later only when the moment lies inside the range.</summary>
+    void ShrinkStartTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ShrinkStartTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves end earlier only when the moment lies inside the range.</summary>
+    void ShrinkEndTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ShrinkEndTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Shrinks bounds to an intersecting period.</summary>
+    void ShrinkTo(ITimePeriod period);
 
-		// ----------------------------------------------------------------------
-		void ShrinkTo( ITimePeriod period );
+    // ----------------------------------------------------------------------
+    /// <summary>Creates a copy shifted by the specified offset.</summary>
+    ITimeRange Copy(TimeSpan offset);
 
-		// ----------------------------------------------------------------------
-		ITimeRange Copy( TimeSpan offset );
+    // ----------------------------------------------------------------------
+    /// <summary>Returns an intersection, or null when no point is shared.</summary>
+    ITimeRange GetIntersection(ITimePeriod period);
 
-		// ----------------------------------------------------------------------
-		ITimeRange GetIntersection( ITimePeriod period );
+} // interface ITimeRange
 
-	} // interface ITimeRange
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

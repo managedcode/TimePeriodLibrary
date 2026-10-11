@@ -8,54 +8,54 @@
 // --------------------------------------------------------------------------
 using System.Collections.Generic;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class CalendarPeriodCollectorFilter : CalendarVisitorFilter, ICalendarPeriodCollectorFilter
 {
 
-	// ------------------------------------------------------------------------
-	public class CalendarPeriodCollectorFilter : CalendarVisitorFilter, ICalendarPeriodCollectorFilter
-	{
+    // ----------------------------------------------------------------------
+    public override void Clear()
+    {
+        base.Clear();
+        collectingMonths.Clear();
+        collectingDays.Clear();
+        collectingHours.Clear();
+    } // Clear
 
-		// ----------------------------------------------------------------------
-		public override void Clear()
-		{
-			base.Clear();
-			collectingMonths.Clear();
-			collectingDays.Clear();
-			collectingHours.Clear();
-		} // Clear
+    // ----------------------------------------------------------------------
+    public IList<MonthRange> CollectingMonths
+    {
+        get { return collectingMonths; }
+    } // CollectingMonths
 
-		// ----------------------------------------------------------------------
-		public IList<MonthRange> CollectingMonths
-		{
-			get { return collectingMonths; }
-		} // CollectingMonths
+    // ----------------------------------------------------------------------
+    public IList<DayRange> CollectingDays
+    {
+        get { return collectingDays; }
+    } // CollectingDays
 
-		// ----------------------------------------------------------------------
-		public IList<DayRange> CollectingDays
-		{
-			get { return collectingDays; }
-		} // CollectingDays
+    // ----------------------------------------------------------------------
+    public IList<HourRange> CollectingHours
+    {
+        get { return collectingHours; }
+    } // CollectingHours
 
-		// ----------------------------------------------------------------------
-		public IList<HourRange> CollectingHours
-		{
-			get { return collectingHours; }
-		} // CollectingHours
+    // ----------------------------------------------------------------------
+    public IList<DayHourRange> CollectingDayHours
+    {
+        get { return collectingDayHours; }
+    } // CollectingDayHours
 
-		// ----------------------------------------------------------------------
-		public IList<DayHourRange> CollectingDayHours
-		{
-			get { return collectingDayHours; }
-		} // CollectingDayHours
+    // ----------------------------------------------------------------------
+    // members
+    private readonly List<MonthRange> collectingMonths = new List<MonthRange>();
+    private readonly List<DayRange> collectingDays = new List<DayRange>();
+    private readonly List<HourRange> collectingHours = new List<HourRange>();
+    private readonly List<DayHourRange> collectingDayHours = new List<DayHourRange>();
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly List<MonthRange> collectingMonths = new List<MonthRange>();
-		private readonly List<DayRange> collectingDays = new List<DayRange>();
-		private readonly List<HourRange> collectingHours = new List<HourRange>();
-		private readonly List<DayHourRange> collectingDayHours = new List<DayHourRange>();
+} // class CalendarPeriodCollectorFilter
 
-	} // class CalendarPeriodCollectorFilter
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

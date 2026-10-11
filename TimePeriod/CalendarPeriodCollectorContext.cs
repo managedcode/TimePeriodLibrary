@@ -7,26 +7,26 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class CalendarPeriodCollectorContext : ICalendarVisitorContext
 {
 
-	// ------------------------------------------------------------------------
-	public class CalendarPeriodCollectorContext : ICalendarVisitorContext
-	{
+    // ----------------------------------------------------------------------
+    public enum CollectType
+    {
+        Year,
+        Month,
+        Day,
+        Hour,
+    } // enum CollectType
 
-		// ----------------------------------------------------------------------
-		public enum CollectType
-		{
-			Year,
-			Month,
-			Day,
-			Hour,
-		} // enum CollectType
+    // ----------------------------------------------------------------------
+    public CollectType Scope { get; set; }
 
-		// ----------------------------------------------------------------------
-		public CollectType Scope { get; set; }
+} // class CalendarPeriodCollectorContext
 
-	} // class CalendarPeriodCollectorContext
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

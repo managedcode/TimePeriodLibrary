@@ -1,49 +1,27 @@
-﻿  <Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net35;net40;net45;net46;net6;net7;net8;net9</TargetFrameworks>
-    <AssemblyName>Itenso.TimePeriod</AssemblyName>
-    <RootNamespace>Itenso.TimePeriod</RootNamespace>
-    <Version>2.1.6</Version>
-    <Authors>Jani Giannoudis</Authors>
-    <Company />
-    <PackageProjectUrl>http://www.codeproject.com/Articles/168662/Time-Period-Library-for-NET</PackageProjectUrl>
-    <Copyright>(c) 2011-2023 by Jani Giannoudis, Switzerland</Copyright>
-    <Description>Extensive time period calculations and individual calendar periods.</Description>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>ManagedCode.TimePeriodLibrary</AssemblyName>
+    <RootNamespace>ManagedCode.TimePeriodLibrary</RootNamespace>
+    <PackageId>ManagedCode.TimePeriodLibrary</PackageId>
+    <Authors>ManagedCode; Jani Giannoudis</Authors>
+    <Copyright>Copyright Jani Giannoudis and contributors; ManagedCode maintenance</Copyright>
+    <PackageProjectUrl>https://github.com/managedcode/TimePeriodLibrary</PackageProjectUrl>
+    <Description>Time intervals, calendar arithmetic and allocation-conscious scheduling primitives for .NET 10. Maintained fork of Jani Giannoudis' Time Period Library.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>C# ASP.NET Windows .NET Mobile Date Time Calendar</PackageTags>
-    <PackageReleaseNotes>Added target frameworks net8, net9 and netstandard2.0. Removed support for netstandard1.6.</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Giannoudis/TimePeriodLibrary</RepositoryUrl>
-    <RepositoryType>GitHub</RepositoryType>
-    <PackageId>TimePeriodLibrary.NET</PackageId>
-    <SignAssembly>True</SignAssembly>
+    <PackageTags>time calendar scheduling intervals booking net10</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugType>portable</DebugType>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>TimePeriodLibrary.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>2.1.6.0</AssemblyVersion>
-    <FileVersion>2.1.6.0</FileVersion>
+    <AssemblyVersion>10.0.0.0</AssemblyVersion>
+    <FileVersion>10.0.0.0</FileVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath></OutputPath>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <DebugType>none</DebugType>
-    <DebugSymbols>False</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="TimeLineMomentCollection.Desktop.cs" />
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../LICENSE.md" Pack="true" PackagePath="/" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
 </Project>

@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriodDemo.Player
+namespace ManagedCode.TimePeriodDemo.Player;
+
+
+// ------------------------------------------------------------------------
+public enum PlayDirection
 {
+    Forward,
+    Backward,
+} // enum PlayDirection
 
-	// ------------------------------------------------------------------------
-	public enum PlayDirection
-	{
-		Forward,
-		Backward,
-	} // enum PlayDirection
-
-} // namespace Itenso.TimePeriodDemo.Player
+// namespace Itenso.TimePeriodDemo.Player
 // -- EOF -------------------------------------------------------------------

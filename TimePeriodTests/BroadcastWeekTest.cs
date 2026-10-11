@@ -7,51 +7,51 @@
 // copyright  : (c) 2011-2013 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 using Xunit;
 
-namespace Itenso.TimePeriodTests
+namespace ManagedCode.TimePeriodTests;
+
+
+// ------------------------------------------------------------------------
+
+public sealed class BroadcastWeekTest : TestUnitBase
 {
 
-    // ------------------------------------------------------------------------
-
-    public sealed class BroadcastWeekTest : TestUnitBase
+    // ----------------------------------------------------------------------
+    [Trait("Category", "BroadcastWeek")]
+    [Fact]
+    public void SpecificMomentsTest()
     {
+        Assert.Equal(2013, new BroadcastWeek(new DateTime(2013, 12, 29)).Year);
+        Assert.Equal(52, new BroadcastWeek(new DateTime(2013, 12, 29)).Week);
 
-        // ----------------------------------------------------------------------
-        [Trait("Category", "BroadcastWeek")]
-        [Fact]
-        public void SpecificMomentsTest()
+        Assert.Equal(2014, new BroadcastWeek(new DateTime(2013, 12, 30)).Year);
+        Assert.Equal(1, new BroadcastWeek(new DateTime(2013, 12, 30)).Week);
+
+        Assert.Equal(2014, new BroadcastWeek(new DateTime(2014, 01, 05)).Year);
+        Assert.Equal(1, new BroadcastWeek(new DateTime(2014, 01, 05)).Week);
+
+        Assert.Equal(2014, new BroadcastWeek(new DateTime(2014, 01, 06)).Year);
+        Assert.Equal(2, new BroadcastWeek(new DateTime(2014, 01, 06)).Week);
+    } // SpecificMomentsTest
+
+    // ----------------------------------------------------------------------
+    [Trait("Category", "BroadcastWeek")]
+    [Fact]
+    public void WeekDaysTest()
+    {
+        var currentYear = ClockProxy.Clock.Now.Year;
+        var weekCount = BroadcastCalendarTool.GetWeeksOfYear(currentYear);
+
+        for (var week = 1; week <= weekCount; week++)
         {
-            Assert.Equal(2013, new BroadcastWeek(new DateTime(2013, 12, 29)).Year);
-            Assert.Equal(52, new BroadcastWeek(new DateTime(2013, 12, 29)).Week);
+            Assert.Equal(7, new BroadcastWeek().GetDays().Count);
+            Assert.Equal(DayOfWeek.Monday, new BroadcastWeek().GetDays()[0].Start.DayOfWeek);
+        }
+    } // WeekDaysTest
 
-            Assert.Equal(2014, new BroadcastWeek(new DateTime(2013, 12, 30)).Year);
-            Assert.Equal(1, new BroadcastWeek(new DateTime(2013, 12, 30)).Week);
+} // class BroadcastWeekTest
 
-            Assert.Equal(2014, new BroadcastWeek(new DateTime(2014, 01, 05)).Year);
-            Assert.Equal(1, new BroadcastWeek(new DateTime(2014, 01, 05)).Week);
-
-            Assert.Equal(2014, new BroadcastWeek(new DateTime(2014, 01, 06)).Year);
-            Assert.Equal(2, new BroadcastWeek(new DateTime(2014, 01, 06)).Week);
-        } // SpecificMomentsTest
-
-        // ----------------------------------------------------------------------
-        [Trait("Category", "BroadcastWeek")]
-        [Fact]
-        public void WeekDaysTest()
-        {
-            var currentYear = ClockProxy.Clock.Now.Year;
-            var weekCount = BroadcastCalendarTool.GetWeeksOfYear(currentYear);
-
-            for (var week = 1; week <= weekCount; week++)
-            {
-                Assert.Equal(7, new BroadcastWeek().GetDays().Count);
-                Assert.Equal(DayOfWeek.Monday, new BroadcastWeek().GetDays()[0].Start.DayOfWeek);
-            }
-        } // WeekDaysTest
-
-    } // class BroadcastWeekTest
-
-} // namespace Itenso.TimePeriodTests
+// namespace Itenso.TimePeriodTests
 // -- EOF -------------------------------------------------------------------

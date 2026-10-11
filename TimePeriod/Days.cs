@@ -8,57 +8,57 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public sealed class Days : DayTimeRange
 {
 
-	// ------------------------------------------------------------------------
-	public sealed class Days : DayTimeRange
-	{
+    // ----------------------------------------------------------------------
+    public Days(DateTime moment, int count) :
+        this(moment, count, new TimeCalendar())
+    {
+    } // Days
 
-		// ----------------------------------------------------------------------
-		public Days( DateTime moment, int count ) :
-			this( moment, count, new TimeCalendar() )
-		{
-		} // Days
+    // ----------------------------------------------------------------------
+    public Days(DateTime moment, int count, ITimeCalendar calendar) :
+        this(calendar.GetYear(moment), calendar.GetMonth(moment), calendar.GetDayOfMonth(moment), count, calendar)
+    {
+    } // Days
 
-		// ----------------------------------------------------------------------
-		public Days( DateTime moment, int count, ITimeCalendar calendar ) :
-			this( calendar.GetYear( moment ), calendar.GetMonth( moment ), calendar.GetDayOfMonth( moment ), count, calendar )
-		{
-		} // Days
+    // ----------------------------------------------------------------------
+    public Days(int startYear, int startMonth, int startDay, int dayCount) :
+        this(startYear, startMonth, startDay, dayCount, new TimeCalendar())
+    {
+    } // Days
 
-		// ----------------------------------------------------------------------
-		public Days( int startYear, int startMonth, int startDay, int dayCount ) :
-			this( startYear, startMonth, startDay, dayCount, new TimeCalendar() )
-		{
-		} // Days
+    // ----------------------------------------------------------------------
+    public Days(int startYear, int startMonth, int startDay, int dayCount, ITimeCalendar calendar) :
+        base(startYear, startMonth, startDay, dayCount, calendar)
+    {
+    } // Days
 
-		// ----------------------------------------------------------------------
-		public Days( int startYear, int startMonth, int startDay, int dayCount, ITimeCalendar calendar ) :
-			base( startYear, startMonth, startDay, dayCount, calendar )
-		{
-		} // Days
+    // ----------------------------------------------------------------------
+    public ITimePeriodCollection GetDays()
+    {
+        TimePeriodCollection days = new TimePeriodCollection();
+        DateTime startDay = new DateTime(StartYear, StartMonth, StartDay);
+        for (int i = 0; i < DayCount; i++)
+        {
+            days.Add(new Day(startDay.AddDays(i), Calendar));
+        }
+        return days;
+    } // GetDays
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodCollection GetDays()
-		{
-			TimePeriodCollection days = new TimePeriodCollection();
-			DateTime startDay = new DateTime( StartYear, StartMonth, StartDay );
-			for ( int i = 0; i < DayCount; i++ )
-			{
-				days.Add( new Day( startDay.AddDays( i ), Calendar ) );
-			}
-			return days;
-		} // GetDays
+    // ----------------------------------------------------------------------
+    protected override string Format(ITimeFormatter formatter)
+    {
+        return formatter.GetCalendarPeriod(StartDayName, EndDayName,
+            formatter.GetShortDate(Start), formatter.GetShortDate(End), Duration);
+    } // Format
 
-		// ----------------------------------------------------------------------
-		protected override string Format( ITimeFormatter formatter )
-		{
-			return formatter.GetCalendarPeriod( StartDayName, EndDayName, 
-				formatter.GetShortDate( Start ), formatter.GetShortDate( End ), Duration );
-		} // Format
+} // class Days
 
-	} // class Days
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -7,17 +7,17 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ICalendarTimeRange : ITimeRange
 {
 
-	// ------------------------------------------------------------------------
-	public interface ICalendarTimeRange : ITimeRange
-	{
+    // ----------------------------------------------------------------------
+    ITimeCalendar Calendar { get; }
 
-		// ----------------------------------------------------------------------
-		ITimeCalendar Calendar { get; }
+} // interface ICalendarTimeRange
 
-	} // interface ICalendarTimeRange
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

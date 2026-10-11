@@ -8,13 +8,13 @@
 // --------------------------------------------------------------------------
 using System.Collections.Generic;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimePeriodComparer : IComparer<ITimePeriod>
 {
+} // interface ITimePeriodComparer
 
-	// ------------------------------------------------------------------------
-	public interface ITimePeriodComparer : IComparer<ITimePeriod>
-	{
-	} // interface ITimePeriodComparer
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -8,84 +8,106 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public class TimePeriodSubtractor<T> where T : ITimePeriod, new()
 {
 
-	// ------------------------------------------------------------------------
-	public class TimePeriodSubtractor<T> where T : ITimePeriod, new()
-	{
+    // ----------------------------------------------------------------------
+    public TimePeriodSubtractor() :
+        this(null)
+    {
+    } // TimePeriodSubtractor
 
-		// ----------------------------------------------------------------------
-		public TimePeriodSubtractor() :
-			this( null )
-		{
-		} // TimePeriodSubtractor
+    // ----------------------------------------------------------------------
+    public TimePeriodSubtractor(ITimePeriodMapper periodMapper)
+    {
+        this.periodMapper = periodMapper;
+        timePeriodCombiner = new TimePeriodCombiner<T>(periodMapper);
+        timeGapCalculator = new TimeGapCalculator<T>(periodMapper);
+        timePeriodIntersector = new TimePeriodIntersector<T>(periodMapper);
+    } // TimePeriodSubtractor
 
-		// ----------------------------------------------------------------------
-		public TimePeriodSubtractor( ITimePeriodMapper periodMapper )
-		{
-			this.periodMapper = periodMapper;
-			timePeriodCombiner = new TimePeriodCombiner<T>( periodMapper );
-			timeGapCalculator = new TimeGapCalculator<T>( periodMapper );
-			timePeriodIntersector = new TimePeriodIntersector<T>( periodMapper );
-		} // TimePeriodSubtractor
+    // ----------------------------------------------------------------------
+    public ITimePeriodMapper PeriodMapper
+    {
+        get { return periodMapper; }
+    } // PeriodMapper
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodMapper PeriodMapper
-		{
-			get { return periodMapper; }
-		} // PeriodMapper
+    // ----------------------------------------------------------------------
+    /// <summary>Removes the subtracting periods from source time without modifying either caller's collection or bounds.</summary>
+    /// <param name="sourcePeriods">Source periods whose remaining time is returned.</param>
+    /// <param name="subtractingPeriods">Periods whose positive-duration time is excluded.</param>
+    /// <param name="combinePeriods">True to combine source periods; false to preserve each source's remaining fragments, including overlap between sources.</param>
+    /// <returns>The remaining time periods.</returns>
+    public virtual ITimePeriodCollection SubtractPeriods(ITimePeriodContainer sourcePeriods, ITimePeriodCollection subtractingPeriods,
+        bool combinePeriods = true)
+    {
+        if (sourcePeriods == null)
+        {
+            throw new ArgumentNullException("sourcePeriods");
+        }
+        if (subtractingPeriods == null)
+        {
+            throw new ArgumentNullException("subtractingPeriods");
+        }
 
-		// ----------------------------------------------------------------------
-		public virtual ITimePeriodCollection SubtractPeriods( ITimePeriodContainer sourcePeriods, ITimePeriodCollection subtractingPeriods,
-			bool combinePeriods = true )
-		{
-			if ( sourcePeriods == null )
-			{
-				throw new ArgumentNullException( "sourcePeriods" );
-			}
-			if ( subtractingPeriods == null )
-			{
-				throw new ArgumentNullException( "subtractingPeriods" );
-			}
+        if (sourcePeriods.Count == 0)
+        {
+            return new TimePeriodCollection();
+        }
 
-			if ( sourcePeriods.Count == 0 )
-			{
-				return new TimePeriodCollection();
-			}
+        if (subtractingPeriods.Count == 0 && !combinePeriods)
+        {
+            return new TimePeriodCollection(sourcePeriods);
+        }
 
-			if ( subtractingPeriods.Count == 0 && !combinePeriods )
-			{
-				return new TimePeriodCollection( sourcePeriods );
-			}
+        // combined source periods
+        if (combinePeriods)
+        {
+            sourcePeriods = timePeriodCombiner.CombinePeriods(sourcePeriods);
+        }
 
-			// combined source periods
-            if (combinePeriods)
-            {
-                sourcePeriods = timePeriodCombiner.CombinePeriods( sourcePeriods );
-            }
+        // combined subtracting periods
+        if (subtractingPeriods.Count == 0)
+        {
+            return new TimePeriodCollection(sourcePeriods);
+        }
+        subtractingPeriods = timePeriodCombiner.CombinePeriods(subtractingPeriods);
 
-			// combined subtracting periods
-			if ( subtractingPeriods.Count == 0 )
-			{
-				return new TimePeriodCollection( sourcePeriods );
-			}
-			subtractingPeriods = timePeriodCombiner.CombinePeriods( subtractingPeriods );
+        // Invert the exclusions without appending gaps to the caller's mutable container.
+        ITimePeriodCollection gaps = timeGapCalculator.GetGaps(
+            subtractingPeriods, new TimeRange(sourcePeriods.Start, sourcePeriods.End));
+        if (combinePeriods)
+        {
+            TimePeriodCollection intersectionInput = new TimePeriodCollection(sourcePeriods);
+            intersectionInput.AddAll(gaps);
+            return timePeriodIntersector.IntersectPeriods(intersectionInput, true);
+        }
 
-			// invert subtracting periods
-			sourcePeriods.AddAll( timeGapCalculator.GetGaps( subtractingPeriods, new TimeRange( sourcePeriods.Start, sourcePeriods.End ) ) );
+        // Intersect each source separately: overlapping sources must not count as
+        // an intersection inside an excluded region.
+        TimePeriodCollection result = new TimePeriodCollection();
+        foreach (ITimePeriod source in sourcePeriods)
+        {
+            TimePeriodCollection intersectionInput = new TimePeriodCollection { source };
+            intersectionInput.AddAll(gaps);
+            result.AddAll(timePeriodIntersector.IntersectPeriods(intersectionInput, false));
+        }
+        result.SortByStart();
+        return result;
+    } // SubtractPeriods
 
-			return timePeriodIntersector.IntersectPeriods( sourcePeriods, combinePeriods );
-		} // SubtractPeriods
+    // ----------------------------------------------------------------------
+    // members
+    private readonly ITimePeriodMapper periodMapper;
+    private readonly TimePeriodCombiner<T> timePeriodCombiner;
+    private readonly TimeGapCalculator<T> timeGapCalculator;
+    private readonly TimePeriodIntersector<T> timePeriodIntersector;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly ITimePeriodMapper periodMapper;
-		private readonly TimePeriodCombiner<T> timePeriodCombiner;
-		private readonly TimeGapCalculator<T> timeGapCalculator;
-		private readonly TimePeriodIntersector<T> timePeriodIntersector;
+} // class TimePeriodSubtractor
 
-	} // class TimePeriodSubtractor
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

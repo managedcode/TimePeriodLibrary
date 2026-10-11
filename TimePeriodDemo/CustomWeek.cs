@@ -8,78 +8,78 @@
 // --------------------------------------------------------------------------
 using System;
 using System.Globalization;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class CustomWeek : CalendarTimeRange
 {
 
-	// ------------------------------------------------------------------------
-	public class CustomWeek : CalendarTimeRange
-	{
+    // ----------------------------------------------------------------------
+    public CustomWeek() :
+        this(new TimeCalendar())
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek() :
-			this( new TimeCalendar() )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public CustomWeek(ITimeCalendar calendar) :
+        this(DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek, calendar)
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek( ITimeCalendar calendar ) :
-			this( DateTimeFormatInfo.CurrentInfo.FirstDayOfWeek, calendar )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public CustomWeek(DayOfWeek firstDayOfWeek) :
+        this(ClockProxy.Clock.Now, firstDayOfWeek, new TimeCalendar())
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek( DayOfWeek firstDayOfWeek ) :
-			this( ClockProxy.Clock.Now, firstDayOfWeek, new TimeCalendar() )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public CustomWeek(DayOfWeek firstDayOfWeek, ITimeCalendar calendar) :
+        this(ClockProxy.Clock.Now, firstDayOfWeek, calendar)
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek( DayOfWeek firstDayOfWeek, ITimeCalendar calendar ) :
-			this( ClockProxy.Clock.Now, firstDayOfWeek, calendar )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public CustomWeek(DateTime moment, DayOfWeek firstDayOfWeek) :
+        this(moment, firstDayOfWeek, new TimeCalendar())
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek( DateTime moment, DayOfWeek firstDayOfWeek ) :
-			this( moment, firstDayOfWeek, new TimeCalendar() )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public CustomWeek(DateTime moment, DayOfWeek firstDayOfWeek, ITimeCalendar calendar) :
+        base(GetPeriodOf(moment, firstDayOfWeek), calendar)
+    {
+    } // CustomWeek
 
-		// ----------------------------------------------------------------------
-		public CustomWeek( DateTime moment, DayOfWeek firstDayOfWeek, ITimeCalendar calendar ) :
-			base( GetPeriodOf( moment, firstDayOfWeek ), calendar )
-		{
-		} // CustomWeek
+    // ----------------------------------------------------------------------
+    public DayOfWeek FirstDayOfWeek
+    {
+        get { return Start.DayOfWeek; }
+    } // FirstDayOfWeek
 
-		// ----------------------------------------------------------------------
-		public DayOfWeek FirstDayOfWeek
-		{
-			get { return Start.DayOfWeek; }
-		} // FirstDayOfWeek
+    // ----------------------------------------------------------------------
+    public ITimePeriodCollection GetDays()
+    {
+        TimePeriodCollection days = new TimePeriodCollection();
+        DateTime startDate = new DateTime(Start.Year, Start.Month, Start.Day);
+        for (int day = 0; day < TimeSpec.DaysPerWeek; day++)
+        {
+            days.Add(new Day(startDate.AddDays(day), Calendar));
+        }
+        return days;
+    } // GetDays
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodCollection GetDays()
-		{
-			TimePeriodCollection days = new TimePeriodCollection();
-			DateTime startDate = new DateTime( Start.Year, Start.Month, Start.Day );
-			for ( int day = 0; day < TimeSpec.DaysPerWeek; day++ )
-			{
-				days.Add( new Day( startDate.AddDays( day ), Calendar ) );
-			}
-			return days;
-		} // GetDays
+    // ----------------------------------------------------------------------
+    private static TimeRange GetPeriodOf(DateTime moment, DayOfWeek firstDayOfWeek)
+    {
+        DateTime start = TimeTool.GetStartOfWeek(moment, firstDayOfWeek);
+        DateTime end = start.AddDays(TimeSpec.DaysPerWeek);
+        return new TimeRange(start, end);
+    } // GetPeriodOf
 
-		// ----------------------------------------------------------------------
-		private static TimeRange GetPeriodOf( DateTime moment, DayOfWeek firstDayOfWeek )
-		{
-			DateTime start = TimeTool.GetStartOfWeek( moment, firstDayOfWeek );
-			DateTime end = start.AddDays( TimeSpec.DaysPerWeek );
-			return new TimeRange( start, end );
-		} // GetPeriodOf
+} // class CustomWeek
 
-	} // class CustomWeek
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

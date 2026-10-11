@@ -8,26 +8,26 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimePeriodMapper
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimePeriodMapper
-	{
+    // ----------------------------------------------------------------------
+    DateTime MapStart(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		DateTime MapStart( DateTime moment );
+    // ----------------------------------------------------------------------
+    DateTime MapEnd(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		DateTime MapEnd( DateTime moment );
+    // ----------------------------------------------------------------------
+    DateTime UnmapStart(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		DateTime UnmapStart( DateTime moment );
+    // ----------------------------------------------------------------------
+    DateTime UnmapEnd(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		DateTime UnmapEnd( DateTime moment );
+} // interface ITimePeriodMapper
 
-	} // interface ITimePeriodMapper
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

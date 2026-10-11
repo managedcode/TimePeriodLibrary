@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriodDemo.Thermostat
+namespace ManagedCode.TimePeriodDemo.Thermostat;
+
+
+// ------------------------------------------------------------------------
+public enum WorkingState
 {
+    On,
+    Off,
+} // enum WorkingState
 
-	// ------------------------------------------------------------------------
-	public enum WorkingState
-	{
-		On, 
-		Off,
-	} // enum WorkingState
-
-} // namespace Itenso.TimePeriodDemo.Thermostat
+// namespace Itenso.TimePeriodDemo.Thermostat
 // -- EOF -------------------------------------------------------------------

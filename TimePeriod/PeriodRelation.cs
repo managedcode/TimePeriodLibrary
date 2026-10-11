@@ -7,26 +7,26 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum PeriodRelation
 {
+    After,
+    StartTouching,
+    StartInside,
+    InsideStartTouching,
+    EnclosingStartTouching,
+    Enclosing,
+    EnclosingEndTouching,
+    ExactMatch,
+    Inside,
+    InsideEndTouching,
+    EndInside,
+    EndTouching,
+    Before,
+} // enum PeriodRelation
 
-	// ------------------------------------------------------------------------
-	public enum PeriodRelation
-	{
-		After,
-		StartTouching,
-		StartInside,
-		InsideStartTouching,
-		EnclosingStartTouching,
-		Enclosing,
-		EnclosingEndTouching,
-		ExactMatch,
-		Inside,
-		InsideEndTouching,
-		EndInside,
-		EndTouching,
-		Before,
-	} // enum PeriodRelation
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

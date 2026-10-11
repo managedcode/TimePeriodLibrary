@@ -1,0 +1,29 @@
+name: Performance
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 5 1 * *'
+permissions:
+  contents: read
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.401'
+      - name: Record runtime and source
+        run: |
+          mkdir -p artifacts/performance
+          dotnet --info > artifacts/performance/runtime.txt
+          git rev-parse HEAD > artifacts/performance/source.txt
+      - name: Measure allocations and throughput
+        run: dotnet run --project benchmarks/TimePeriod.Benchmarks --configuration Release -- --filter '*BookingIntervalBenchmarks*' --job short --exporters json markdown --artifacts artifacts/performance/benchmarks
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/performance/
+          if-no-files-found: error
+          retention-days: 90

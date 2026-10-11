@@ -7,15 +7,15 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum YearWeekType
 {
+    Calendar,
+    Iso8601,
+} // enum YearWeekType
 
-	// ------------------------------------------------------------------------
-	public enum YearWeekType
-	{
-		Calendar,
-		Iso8601,
-	} // enum YearWeekType
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

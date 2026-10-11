@@ -7,32 +7,32 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class IdTimeRange : TimeRange
 {
 
-	// ------------------------------------------------------------------------
-	public class IdTimeRange : TimeRange
-	{
+    // ----------------------------------------------------------------------
+    public IdTimeRange(int id, DateTime start, DateTime end) :
+        base(start, end)
+    {
+        Id = id;
+    } // IdTimeRange
 
-		// ----------------------------------------------------------------------
-		public IdTimeRange( int id, DateTime start, DateTime end ) :
-			base( start, end )
-		{
-			Id = id;
-		} // IdTimeRange		
+    // ----------------------------------------------------------------------
+    public int Id { get; private set; }
 
-		// ----------------------------------------------------------------------
-		public int Id { get; private set; }
+    // ----------------------------------------------------------------------
+    public override string ToString()
+    {
+        return Id + ": " + base.ToString();
+    } // ToString
 
-		// ----------------------------------------------------------------------
-		public override string ToString()
-		{
-			return Id + ": " + base.ToString();
-		} // ToString
+} // IdTimeRange
 
-	} // IdTimeRange
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

@@ -7,45 +7,45 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public static class ClockProxy
 {
 
-	// ------------------------------------------------------------------------
-	public static class ClockProxy
-	{
+    // ----------------------------------------------------------------------
+    public static IClock Clock
+    {
+        get
+        {
+            if (clock == null)
+            {
+                lock (mutex)
+                {
+                    if (clock == null)
+                    {
+                        clock = new SystemClock();
+                    }
+                }
+            }
+            return clock;
+        }
+        set
+        {
+            lock (mutex)
+            {
+                clock = value;
+            }
+        }
+    } // Clock
 
-		// ----------------------------------------------------------------------
-		public static IClock Clock
-		{
-			get
-			{
-				if ( clock == null )
-				{
-					lock ( mutex )
-					{
-						if ( clock == null )
-						{
-							clock = new SystemClock();
-						}
-					}
-				}
-				return clock;
-			}
-			set
-			{
-				lock ( mutex )
-				{
-					clock = value;
-				}
-			}
-		} // Clock
+    // ----------------------------------------------------------------------
+    // members
+    private static readonly object mutex = new object();
+    private static volatile IClock clock;
 
-		// ----------------------------------------------------------------------
-		// members
-		private static readonly object mutex = new object();
-		private static volatile IClock clock;
+} // class ClockProxy
 
-	} // class ClockProxy
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

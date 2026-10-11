@@ -6,56 +6,56 @@
 // environment: .NET 2.0
 // copyright  : (c) 2011-2013 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class BroadcastWeekDemo : TimePeriodExamples
 {
 
-	// ------------------------------------------------------------------------
-	public class BroadcastWeekDemo : TimePeriodDemo
-	{
+    // ----------------------------------------------------------------------
+    public static void ShowAll(int year, int weekOfYear)
+    {
+        WriteLine("Input: year={0}, week={1}", year, weekOfYear);
+        WriteLine();
 
-		// ----------------------------------------------------------------------
-		public static void ShowAll( int year, int weekOfYear )
-		{
-			WriteLine( "Input: year={0}, week={1}", year, weekOfYear );
-			WriteLine();
+        BroadcastWeek week = new BroadcastWeek(year, weekOfYear);
 
-			BroadcastWeek week = new BroadcastWeek( year, weekOfYear );
+        BroadcastWeek previousWeek = week.GetPreviousWeek();
+        BroadcastWeek nextWeek = week.GetNextWeek();
 
-			BroadcastWeek previousWeek = week.GetPreviousWeek();
-			BroadcastWeek nextWeek = week.GetNextWeek();
+        ShowWeek(week);
+        ShowCompactWeek(previousWeek, "Previous BroadcastWeek");
+        ShowCompactWeek(nextWeek, "Next BroadcastWeek");
+        WriteLine();
 
-			ShowWeek( week );
-			ShowCompactWeek( previousWeek, "Previous BroadcastWeek" );
-			ShowCompactWeek( nextWeek, "Next BroadcastWeek" );
-			WriteLine();
+        foreach (Day day in week.GetDays())
+        {
+            DayDemo.ShowCompactDay(day);
+        }
+        WriteLine();
+    } // ShowAll
 
-			foreach ( Day day in week.GetDays() )
-			{
-				DayDemo.ShowCompactDay( day );
-			}
-			WriteLine();
-		} // ShowAll
+    // ----------------------------------------------------------------------
+    public static void ShowCompactWeek(BroadcastWeek week, string caption = "BroadcastWeek")
+    {
+        WriteLine("{0}: {1}", caption, week);
+    } // ShowCompactWeek
 
-		// ----------------------------------------------------------------------
-		public static void ShowCompactWeek( BroadcastWeek week, string caption = "BroadcastWeek" )
-		{
-			WriteLine( "{0}: {1}", caption, week );
-		} // ShowCompactWeek
+    // ----------------------------------------------------------------------
+    public static void ShowWeek(BroadcastWeek week, string caption = "BroadcastWeek")
+    {
+        WriteLine("{0}: {1}", caption, week);
+        WriteIndentLine("Year: {0}", week.Year);
+        WriteIndentLine("Week: {0}", week.Week);
+        WriteIndentLine("FirstDayStart: {0}", Format(week.FirstDayStart));
+        WriteIndentLine("LastDayStart: {0}", Format(week.LastDayStart));
+        WriteLine();
+    } // ShowWeek
 
-		// ----------------------------------------------------------------------
-		public static void ShowWeek( BroadcastWeek week, string caption = "BroadcastWeek" )
-		{
-			WriteLine( "{0}: {1}", caption, week );
-			WriteIndentLine( "Year: {0}", week.Year );
-			WriteIndentLine( "Week: {0}", week.Week );
-			WriteIndentLine( "FirstDayStart: {0}", Format( week.FirstDayStart ) );
-			WriteIndentLine( "LastDayStart: {0}", Format( week.LastDayStart ) );
-			WriteLine();
-		} // ShowWeek
+} // class BroadcastWeekDemo
 
-	} // class BroadcastWeekDemo
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

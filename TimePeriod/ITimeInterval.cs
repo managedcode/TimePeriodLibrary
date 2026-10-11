@@ -8,80 +8,103 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+/// <summary>A period with open or closed endpoints. Enabled open edges adjust effective bounds by one tick.</summary>
+public interface ITimeInterval : ITimePeriod
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimeInterval : ITimePeriod
-	{
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether start is open.</summary>
+    bool IsStartOpen { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsStartOpen { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether end is open.</summary>
+    bool IsEndOpen { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsEndOpen { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether both edges are open.</summary>
+    bool IsOpen { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsOpen { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether start is closed.</summary>
+    bool IsStartClosed { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsStartClosed { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether end is closed.</summary>
+    bool IsEndClosed { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsEndClosed { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether both edges are closed.</summary>
+    bool IsClosed { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsClosed { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether this is a moment without two closed edges.</summary>
+    bool IsEmpty { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsEmpty { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether this is a moment with both edges closed.</summary>
+    bool IsDegenerate { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsDegenerate { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets whether open edges adjust the effective bounds.</summary>
+    bool IsIntervalEnabled { get; }
 
-		// ----------------------------------------------------------------------
-		bool IsIntervalEnabled { get; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets raw start before open-edge tick adjustment.</summary>
+    DateTime StartInterval { get; set; }
 
-		// ----------------------------------------------------------------------
-		DateTime StartInterval { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets raw end before open-edge tick adjustment.</summary>
+    DateTime EndInterval { get; set; }
 
-		// ----------------------------------------------------------------------
-		DateTime EndInterval { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets the start edge kind.</summary>
+    IntervalEdge StartEdge { get; set; }
 
-		// ----------------------------------------------------------------------
-		IntervalEdge StartEdge { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Gets or sets the end edge kind.</summary>
+    IntervalEdge EndEdge { get; set; }
 
-		// ----------------------------------------------------------------------
-		IntervalEdge EndEdge { get; set; }
+    // ----------------------------------------------------------------------
+    /// <summary>Shifts both raw endpoints by offset.</summary>
+    void Move(TimeSpan offset);
 
-		// ----------------------------------------------------------------------
-		void Move( TimeSpan offset );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves raw start earlier only when the moment precedes it.</summary>
+    void ExpandStartTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandStartTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves raw end later only when the moment follows it.</summary>
+    void ExpandEndTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandEndTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Expands raw bounds to contain a moment.</summary>
+    void ExpandTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ExpandTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Expands raw bounds to contain another period.</summary>
+    void ExpandTo(ITimePeriod period);
 
-		// ----------------------------------------------------------------------
-		void ExpandTo( ITimePeriod period );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves raw start later when the moment lies within the effective interval.</summary>
+    void ShrinkStartTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ShrinkStartTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Moves raw end earlier when the moment lies within the effective interval.</summary>
+    void ShrinkEndTo(DateTime moment);
 
-		// ----------------------------------------------------------------------
-		void ShrinkEndTo( DateTime moment );
+    // ----------------------------------------------------------------------
+    /// <summary>Shrinks raw endpoints to an intersecting period.</summary>
+    void ShrinkTo(ITimePeriod period);
 
-		// ----------------------------------------------------------------------
-		void ShrinkTo( ITimePeriod period );
+    // ----------------------------------------------------------------------
+    /// <summary>Creates a shifted copy preserving edge kinds and edge enablement.</summary>
+    ITimeInterval Copy(TimeSpan offset);
 
-		// ----------------------------------------------------------------------
-		ITimeInterval Copy( TimeSpan offset );
+} // interface ITimeInterval
 
-	} // interface ITimeInterval
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

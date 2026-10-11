@@ -8,77 +8,77 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public static class TimeTrim
 {
 
-	// ------------------------------------------------------------------------
-	public static class TimeTrim
-	{
+    #region Month
 
-		#region Month
+    // ----------------------------------------------------------------------
+    public static DateTime Month(DateTime dateTime, int month = 1, int day = 1,
+        int hour = 0, int minute = 0, int second = 0, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, month, day, hour, minute, second, millisecond);
+    } // Month
 
-		// ----------------------------------------------------------------------
-		public static DateTime Month( DateTime dateTime, int month = 1, int day = 1,
-			int hour = 0, int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, month, day, hour, minute, second, millisecond );
-		} // Month
+    #endregion
 
-		#endregion
+    #region Day
 
-		#region Day
+    // ----------------------------------------------------------------------
+    public static DateTime Day(DateTime dateTime, int day = 1,
+        int hour = 0, int minute = 0, int second = 0, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, day, hour, minute, second, millisecond);
+    } // Day
 
-		// ----------------------------------------------------------------------
-		public static DateTime Day( DateTime dateTime, int day = 1,
-			int hour = 0, int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, dateTime.Month, day, hour, minute, second, millisecond );
-		} // Day
+    #endregion
 
-		#endregion
+    #region Hour
 
-		#region Hour
+    // ----------------------------------------------------------------------
+    public static DateTime Hour(DateTime dateTime, int hour = 0,
+        int minute = 0, int second = 0, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, hour, minute, second, millisecond);
+    } // Hour
 
-		// ----------------------------------------------------------------------
-		public static DateTime Hour( DateTime dateTime, int hour = 0,
-			int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, dateTime.Month, dateTime.Day, hour, minute, second, millisecond );
-		} // Hour
+    #endregion
 
-		#endregion
+    #region Minute
 
-		#region Minute
+    // ----------------------------------------------------------------------
+    public static DateTime Minute(DateTime dateTime, int minute = 0, int second = 0, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, minute, second, millisecond);
+    } // Minute
 
-		// ----------------------------------------------------------------------
-		public static DateTime Minute( DateTime dateTime, int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, minute, second, millisecond );
-		} // Minute
+    #endregion
 
-		#endregion
+    #region Second
 
-		#region Second
+    // ----------------------------------------------------------------------
+    public static DateTime Second(DateTime dateTime, int second = 0, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, second, millisecond);
+    } // Second
 
-		// ----------------------------------------------------------------------
-		public static DateTime Second( DateTime dateTime, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, second, millisecond );
-		} // Second
+    #endregion
 
-		#endregion
+    #region Millisecond
 
-		#region Millisecond
+    // ----------------------------------------------------------------------
+    public static DateTime Millisecond(DateTime dateTime, int millisecond = 0)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, millisecond);
+    } // Millisecond
 
-		// ----------------------------------------------------------------------
-		public static DateTime Millisecond( DateTime dateTime, int millisecond = 0 )
-		{
-			return new DateTime( dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, millisecond );
-		} // Millisecond
+    #endregion
 
-		#endregion
+} // class TimeTrim
 
-	} // class TimeTrim
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

@@ -7,22 +7,22 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class MyEmptyTimePeriodCollection : TimePeriodCollection
 {
 
-	// ------------------------------------------------------------------------
-	public class MyEmptyTimePeriodCollection : TimePeriodCollection
-	{
+    // ----------------------------------------------------------------------
+    protected override TimeSpan? GetDuration()
+    {
+        return base.GetDuration() ?? TimeSpan.Zero;
+    } // GetDuration
 
-		// ----------------------------------------------------------------------
-		protected override TimeSpan? GetDuration()
-		{
-			return base.GetDuration() ?? TimeSpan.Zero;
-		} // GetDuration
+} // class MyEmptyTimePeriodCollection
 
-	} // class MyEmptyTimePeriodCollection
-
-} // namespace Itenso.TimePeriodDemo.Player
+// namespace Itenso.TimePeriodDemo.Player
 // -- EOF -------------------------------------------------------------------

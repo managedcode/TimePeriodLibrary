@@ -7,36 +7,36 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public sealed class TimePeriodReversComparer : ITimePeriodComparer
 {
 
-	// ------------------------------------------------------------------------
-	public sealed class TimePeriodReversComparer : ITimePeriodComparer
-	{
+    // ----------------------------------------------------------------------
+    public TimePeriodReversComparer(ITimePeriodComparer baseComparer)
+    {
+        this.baseComparer = baseComparer;
+    } // TimePeriodReversComparer
 
-		// ----------------------------------------------------------------------
-		public TimePeriodReversComparer( ITimePeriodComparer baseComparer )
-		{
-			this.baseComparer = baseComparer;
-		} // TimePeriodReversComparer
+    // ----------------------------------------------------------------------
+    public ITimePeriodComparer BaseComparer
+    {
+        get { return baseComparer; }
+    } // BaseComparer
 
-		// ----------------------------------------------------------------------
-		public ITimePeriodComparer BaseComparer
-		{
-			get { return baseComparer; }
-		} // BaseComparer
+    // ----------------------------------------------------------------------
+    public int Compare(ITimePeriod left, ITimePeriod right)
+    {
+        return -baseComparer.Compare(left, right);
+    } // Compare
 
-		// ----------------------------------------------------------------------
-		public int Compare( ITimePeriod left, ITimePeriod right )
-		{
-			return -baseComparer.Compare( left, right );
-		} // Compare
+    // ----------------------------------------------------------------------
+    // members
+    private readonly ITimePeriodComparer baseComparer;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly ITimePeriodComparer baseComparer;
+} // class TimePeriodReversComparer
 
-	} // class TimePeriodReversComparer
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

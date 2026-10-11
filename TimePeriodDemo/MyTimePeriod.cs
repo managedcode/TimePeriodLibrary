@@ -8,20 +8,20 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class MyTimePeriod
 {
 
-	// ------------------------------------------------------------------------
-	public class MyTimePeriod
-	{
+    // ----------------------------------------------------------------------
+    public DateTime Start { get; set; }
 
-		// ----------------------------------------------------------------------
-		public DateTime Start { get; set; }
+    // ----------------------------------------------------------------------
+    public DateTime End { get; set; }
 
-		// ----------------------------------------------------------------------
-		public DateTime End { get; set; }
+} // class MyTimePeriod
 
-	} // class MyTimePeriod
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

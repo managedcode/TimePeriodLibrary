@@ -8,60 +8,60 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public struct MonthRange
 {
 
-	// ------------------------------------------------------------------------
-	public struct MonthRange
-	{
+    // ----------------------------------------------------------------------
+    public MonthRange(YearMonth month) :
+        this(month, month)
+    {
+    } // MonthRange
 
-		// ----------------------------------------------------------------------
-		public MonthRange( YearMonth month ) :
-			this( month, month )
-		{
-		} // MonthRange
+    // ----------------------------------------------------------------------
+    public MonthRange(YearMonth min, YearMonth max)
+    {
+        if (max < min)
+        {
+            throw new ArgumentOutOfRangeException("max");
+        }
+        this.min = min;
+        this.max = max;
+    } // MonthRange
 
-		// ----------------------------------------------------------------------
-		public MonthRange( YearMonth min, YearMonth max )
-		{
-			if ( max < min )
-			{
-				throw new ArgumentOutOfRangeException( "max" );
-			}
-			this.min = min;
-			this.max = max;
-		} // MonthRange
+    // ----------------------------------------------------------------------
+    public YearMonth Min
+    {
+        get { return min; }
+    } // Min
 
-		// ----------------------------------------------------------------------
-		public YearMonth Min
-		{
-			get { return min; }
-		} // Min
+    // ----------------------------------------------------------------------
+    public YearMonth Max
+    {
+        get { return max; }
+    } // Max
 
-		// ----------------------------------------------------------------------
-		public YearMonth Max
-		{
-			get { return max; }
-		} // Max
+    // ----------------------------------------------------------------------
+    public bool IsSingleMonth
+    {
+        get { return min == max; }
+    } // IsSingleMonth
 
-		// ----------------------------------------------------------------------
-		public bool IsSingleMonth
-		{
-			get { return min == max; }
-		} // IsSingleMonth
+    // ----------------------------------------------------------------------
+    public bool HasInside(YearMonth test)
+    {
+        return test >= min && test <= max;
+    } // HasInside
 
-		// ----------------------------------------------------------------------
-		public bool HasInside( YearMonth test )
-		{
-			return test >= min && test <= max;
-		} // HasInside
+    // ----------------------------------------------------------------------
+    // members
+    private readonly YearMonth min;
+    private readonly YearMonth max;
 
-		// ----------------------------------------------------------------------
-		// members
-		private readonly YearMonth min;
-		private readonly YearMonth max;
+} // struct MonthRange
 
-	} // struct MonthRange
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

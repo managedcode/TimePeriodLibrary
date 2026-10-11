@@ -7,24 +7,24 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriodDemo.HumanNotions
+namespace ManagedCode.TimePeriodDemo.HumanNotions;
+
+
+// ------------------------------------------------------------------------
+public enum TimeUnit
 {
+    Tick,
+    Millisecond,
+    Second,
+    Minute,
+    Hour,
+    Day,
+    Week,
+    Month,
+    Quarter,
+    Halfyear,
+    Year,
+} // enum TimeUnit
 
-	// ------------------------------------------------------------------------
-	public enum TimeUnit
-	{
-		Tick,
-		Millisecond,
-		Second,
-		Minute,
-		Hour,
-		Day,
-		Week,
-		Month,
-		Quarter,
-		Halfyear,
-		Year,
-	} // enum TimeUnit
-
-} // namespace Itenso.TimePeriodDemo.HumanNotions
+// namespace Itenso.TimePeriodDemo.HumanNotions
 // -- EOF -------------------------------------------------------------------

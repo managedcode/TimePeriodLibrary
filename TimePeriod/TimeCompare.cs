@@ -9,158 +9,158 @@
 using System;
 using System.Globalization;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public static class TimeCompare
 {
 
-	// ------------------------------------------------------------------------
-	public static class TimeCompare
-	{
+    #region Year
 
-		#region Year
+    // ----------------------------------------------------------------------
+    public static bool IsSameYear(DateTime left, DateTime right)
+    {
+        return left.Year == right.Year;
+    } // IsSameYear
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameYear( DateTime left, DateTime right )
-		{
-			return left.Year == right.Year;
-		} // IsSameYear
+    // ----------------------------------------------------------------------
+    public static bool IsSameYear(YearMonth yearStartMonth, DateTime left, DateTime right)
+    {
+        return TimeTool.GetYearOf(yearStartMonth, left) == TimeTool.GetYearOf(yearStartMonth, right);
+    } // IsSameYear
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameYear( YearMonth yearStartMonth, DateTime left, DateTime right )
-		{
-			return TimeTool.GetYearOf( yearStartMonth, left ) == TimeTool.GetYearOf( yearStartMonth, right );
-		} // IsSameYear
+    #endregion
 
-		#endregion
+    #region Hafyear
 
-		#region Hafyear
+    // ----------------------------------------------------------------------
+    public static bool IsSameHalfyear(DateTime left, DateTime right)
+    {
+        return IsSameHalfyear(TimeSpec.CalendarYearStartMonth, left, right);
+    } // IsSameHalfyear
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameHalfyear( DateTime left, DateTime right )
-		{
-			return IsSameHalfyear( TimeSpec.CalendarYearStartMonth, left, right );
-		} // IsSameHalfyear
+    // ----------------------------------------------------------------------
+    public static bool IsSameHalfyear(YearMonth yearStartMonth, DateTime left, DateTime right)
+    {
+        int leftYear = TimeTool.GetYearOf(yearStartMonth, left);
+        int rightYear = TimeTool.GetYearOf(yearStartMonth, right);
+        if (leftYear != rightYear)
+        {
+            return false;
+        }
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameHalfyear( YearMonth yearStartMonth, DateTime left, DateTime right )
-		{
-			int leftYear = TimeTool.GetYearOf( yearStartMonth, left );
-			int rightYear = TimeTool.GetYearOf( yearStartMonth, right );
-			if ( leftYear != rightYear )
-			{
-				return false;
-			}
+        return TimeTool.GetHalfyearOfMonth(yearStartMonth, (YearMonth)left.Month) == TimeTool.GetHalfyearOfMonth(yearStartMonth, (YearMonth)right.Month);
+    } // IsSameHalfyear
 
-			return TimeTool.GetHalfyearOfMonth( yearStartMonth, (YearMonth)left.Month ) == TimeTool.GetHalfyearOfMonth( yearStartMonth, (YearMonth)right.Month );
-		} // IsSameHalfyear
+    #endregion
 
-		#endregion
+    #region Quarter
 
-		#region Quarter
+    // ----------------------------------------------------------------------
+    public static bool IsSameQuarter(DateTime left, DateTime right)
+    {
+        return IsSameQuarter(TimeSpec.CalendarYearStartMonth, left, right);
+    } // IsSameQuarter
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameQuarter( DateTime left, DateTime right )
-		{
-			return IsSameQuarter( TimeSpec.CalendarYearStartMonth, left, right );
-		} // IsSameQuarter
+    // ----------------------------------------------------------------------
+    public static bool IsSameQuarter(YearMonth yearStartMonth, DateTime left, DateTime right)
+    {
+        int leftYear = TimeTool.GetYearOf(yearStartMonth, left);
+        int rightYear = TimeTool.GetYearOf(yearStartMonth, right);
+        if (leftYear != rightYear)
+        {
+            return false;
+        }
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameQuarter( YearMonth yearStartMonth, DateTime left, DateTime right )
-		{
-			int leftYear = TimeTool.GetYearOf( yearStartMonth, left );
-			int rightYear = TimeTool.GetYearOf( yearStartMonth, right );
-			if ( leftYear != rightYear )
-			{
-				return false;
-			}
+        return TimeTool.GetQuarterOfMonth(yearStartMonth, (YearMonth)left.Month) == TimeTool.GetQuarterOfMonth(yearStartMonth, (YearMonth)right.Month);
+    } // IsSameQuarter
 
-			return TimeTool.GetQuarterOfMonth( yearStartMonth, (YearMonth)left.Month ) == TimeTool.GetQuarterOfMonth( yearStartMonth, (YearMonth)right.Month );
-		} // IsSameQuarter
+    #endregion
 
-		#endregion
+    #region Month
 
-		#region Month
+    // ----------------------------------------------------------------------
+    public static bool IsSameMonth(DateTime left, DateTime right)
+    {
+        return IsSameYear(left, right) && left.Month == right.Month;
+    } // IsSameMonth
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameMonth( DateTime left, DateTime right )
-		{
-			return IsSameYear( left, right ) && left.Month == right.Month;
-		} // IsSameMonth
+    #endregion
 
-		#endregion
+    #region Week
 
-		#region Week
+    // ----------------------------------------------------------------------
+    public static bool IsSameWeek(DateTime left, DateTime right, CultureInfo culture, YearWeekType weekType)
+    {
+        return IsSameWeek(left, right, culture, culture.DateTimeFormat.CalendarWeekRule, culture.DateTimeFormat.FirstDayOfWeek, weekType);
+    } // IsSameWeek
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameWeek( DateTime left, DateTime right, CultureInfo culture, YearWeekType weekType )
-		{
-			return IsSameWeek( left, right, culture, culture.DateTimeFormat.CalendarWeekRule, culture.DateTimeFormat.FirstDayOfWeek, weekType );
-		} // IsSameWeek
+    // ----------------------------------------------------------------------
+    public static bool IsSameWeek(DateTime left, DateTime right, CultureInfo culture,
+        CalendarWeekRule weekRule, DayOfWeek firstDayOfWeek, YearWeekType weekType)
+    {
+        if (culture == null)
+        {
+            throw new ArgumentNullException("culture");
+        }
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameWeek( DateTime left, DateTime right, CultureInfo culture, 
-			CalendarWeekRule weekRule, DayOfWeek firstDayOfWeek, YearWeekType weekType )
-		{
-			if ( culture == null )
-			{
-				throw new ArgumentNullException( "culture" );
-			}
+        // left
+        int leftWeekOfYear;
+        int leftYear;
+        TimeTool.GetWeekOfYear(left, culture, weekRule, firstDayOfWeek, weekType, out leftYear, out leftWeekOfYear);
 
-			// left
-			int leftWeekOfYear;
-			int leftYear;
-			TimeTool.GetWeekOfYear( left, culture, weekRule, firstDayOfWeek, weekType, out leftYear, out leftWeekOfYear );
+        // rught
+        int rightWeekOfYear;
+        int rightYear;
+        TimeTool.GetWeekOfYear(right, culture, weekRule, firstDayOfWeek, weekType, out rightYear, out rightWeekOfYear);
 
-			// rught
-			int rightWeekOfYear;
-			int rightYear;
-			TimeTool.GetWeekOfYear( right, culture, weekRule, firstDayOfWeek, weekType, out rightYear, out rightWeekOfYear );
+        return leftYear == rightYear && leftWeekOfYear == rightWeekOfYear;
+    } // IsSameWeek
 
-			return leftYear == rightYear && leftWeekOfYear == rightWeekOfYear;
-		} // IsSameWeek
+    #endregion
 
-		#endregion
+    #region Day
 
-		#region Day
+    // ----------------------------------------------------------------------
+    public static bool IsSameDay(DateTime left, DateTime right)
+    {
+        return IsSameMonth(left, right) && left.Day == right.Day;
+    } // IsSameDay
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameDay( DateTime left, DateTime right )
-		{
-			return IsSameMonth( left, right ) && left.Day == right.Day;
-		} // IsSameDay
+    #endregion
 
-		#endregion
+    #region Hour
 
-		#region Hour
+    // ----------------------------------------------------------------------
+    public static bool IsSameHour(DateTime left, DateTime right)
+    {
+        return IsSameDay(left, right) && left.Hour == right.Hour;
+    } // IsSameHour
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameHour( DateTime left, DateTime right )
-		{
-			return IsSameDay( left, right ) && left.Hour == right.Hour;
-		} // IsSameHour
+    #endregion
 
-		#endregion
+    #region Minute
 
-		#region Minute
+    // ----------------------------------------------------------------------
+    public static bool IsSameMinute(DateTime left, DateTime right)
+    {
+        return IsSameHour(left, right) && left.Minute == right.Minute;
+    } // IsSameMinute
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameMinute( DateTime left, DateTime right )
-		{
-			return IsSameHour( left, right ) && left.Minute == right.Minute;
-		} // IsSameMinute
+    #endregion
 
-		#endregion
+    #region Second
 
-		#region Second
+    // ----------------------------------------------------------------------
+    public static bool IsSameSecond(DateTime left, DateTime right)
+    {
+        return IsSameMinute(left, right) && left.Second == right.Second;
+    } // IsSameSecond
 
-		// ----------------------------------------------------------------------
-		public static bool IsSameSecond( DateTime left, DateTime right )
-		{
-			return IsSameMinute( left, right ) && left.Second == right.Second;
-		} // IsSameSecond
+    #endregion
 
-		#endregion
+} // class TimeCompare
 
-	} // class TimeCompare
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

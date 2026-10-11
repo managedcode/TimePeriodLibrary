@@ -7,13 +7,13 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ICalendarVisitorContext
 {
+} // interface ICalendarVisitorContext
 
-	// ------------------------------------------------------------------------
-	public interface ICalendarVisitorContext
-	{
-	} // interface ICalendarVisitorContext
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

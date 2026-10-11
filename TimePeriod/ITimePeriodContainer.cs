@@ -9,26 +9,26 @@
 using System;
 using System.Collections.Generic;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimePeriodContainer : IList<ITimePeriod>, ITimePeriod
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimePeriodContainer : IList<ITimePeriod>, ITimePeriod
-	{
+    // ----------------------------------------------------------------------
+    new bool IsReadOnly { get; }
 
-		// ----------------------------------------------------------------------
-		new bool IsReadOnly { get; }
+    // ----------------------------------------------------------------------
+    bool ContainsPeriod(ITimePeriod test);
 
-		// ----------------------------------------------------------------------
-		bool ContainsPeriod( ITimePeriod test );
+    // ----------------------------------------------------------------------
+    void AddAll(IEnumerable<ITimePeriod> periods);
 
-		// ----------------------------------------------------------------------
-		void AddAll( IEnumerable<ITimePeriod> periods );
+    // ----------------------------------------------------------------------
+    void Move(TimeSpan delta);
 
-		// ----------------------------------------------------------------------
-		void Move( TimeSpan delta );
+} // class ITimePeriodContainer
 
-	} // class ITimePeriodContainer
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

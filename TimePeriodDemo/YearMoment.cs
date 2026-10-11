@@ -7,68 +7,68 @@
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 using System;
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo
+namespace ManagedCode.TimePeriodDemo;
+
+
+// ------------------------------------------------------------------------
+public class YearMoment
 {
 
-	// ------------------------------------------------------------------------
-	public class YearMoment
-	{
+    // ----------------------------------------------------------------------
+    public YearMoment() :
+        this(DateTime.Now)
+    {
+    } // YearMoment
 
-		// ----------------------------------------------------------------------
-		public YearMoment() :
-			this( DateTime.Now )
-		{
-		} // YearMoment
+    // ----------------------------------------------------------------------
+    public YearMoment(DateTime moment) :
+        this(moment.Month, moment.Day)
+    {
+    } // YearMoment
 
-		// ----------------------------------------------------------------------
-		public YearMoment( DateTime moment ) :
-			this( moment.Month, moment.Day )
-		{
-		} // YearMoment
+    // ----------------------------------------------------------------------
+    public YearMoment(int month, int day)
+    {
+        Month = month;
+        Day = day;
+    } // YearMoment
 
-		// ----------------------------------------------------------------------
-		public YearMoment( int month, int day )
-		{
-			Month = month;
-			Day = day;
-		} // YearMoment
+    // ----------------------------------------------------------------------
+    public int Month
+    {
+        get { return month; }
+        set
+        {
+            if (value < 1 || value > TimeSpec.MonthsPerYear)
+            {
+                throw new ArgumentOutOfRangeException("value");
+            }
+            month = value;
+        }
+    } // Month
 
-		// ----------------------------------------------------------------------
-		public int Month
-		{
-			get { return month; }
-			set
-			{
-				if ( value < 1 || value > TimeSpec.MonthsPerYear )
-				{
-					throw new ArgumentOutOfRangeException( "value" );
-				}
-				month = value;
-			}
-		} // Month
+    // ----------------------------------------------------------------------
+    public int Day
+    {
+        get { return day; }
+        set
+        {
+            if (value < 1 || value > TimeSpec.MaxDaysPerMonth)
+            {
+                throw new ArgumentOutOfRangeException("value");
+            }
+            day = value;
+        }
+    } // Day
 
-		// ----------------------------------------------------------------------
-		public int Day
-		{
-			get { return day; }
-			set
-			{
-				if ( value < 1 || value > TimeSpec.MaxDaysPerMonth )
-				{
-					throw new ArgumentOutOfRangeException( "value" );
-				}
-				day = value;
-			}
-		} // Day
+    // ----------------------------------------------------------------------
+    // members
+    private int month;
+    private int day;
 
-		// ----------------------------------------------------------------------
-		// members
-		private int month;
-		private int day;
+} // YearMoment
 
-	} // YearMoment
-
-} // namespace Itenso.TimePeriodDemo
+// namespace Itenso.TimePeriodDemo
 // -- EOF -------------------------------------------------------------------

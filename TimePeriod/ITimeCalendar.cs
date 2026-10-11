@@ -9,104 +9,104 @@
 using System;
 using System.Globalization;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ITimeCalendar : ITimePeriodMapper
 {
 
-	// ------------------------------------------------------------------------
-	public interface ITimeCalendar : ITimePeriodMapper
-	{
+    // ----------------------------------------------------------------------
+    CultureInfo Culture { get; }
 
-		// ----------------------------------------------------------------------
-		CultureInfo Culture { get; }
+    // ----------------------------------------------------------------------
+    YearType YearType { get; }
 
-		// ----------------------------------------------------------------------
-		YearType YearType { get; }
+    // ----------------------------------------------------------------------
+    TimeSpan StartOffset { get; }
 
-		// ----------------------------------------------------------------------
-		TimeSpan StartOffset { get; }
+    // ----------------------------------------------------------------------
+    TimeSpan EndOffset { get; }
 
-		// ----------------------------------------------------------------------
-		TimeSpan EndOffset { get; }
+    // ----------------------------------------------------------------------
+    YearMonth YearBaseMonth { get; }
 
-		// ----------------------------------------------------------------------
-		YearMonth YearBaseMonth { get; }
+    // ----------------------------------------------------------------------
+    YearMonth FiscalYearBaseMonth { get; }
 
-		// ----------------------------------------------------------------------
-		YearMonth FiscalYearBaseMonth { get; }
+    // ----------------------------------------------------------------------
+    DayOfWeek FiscalFirstDayOfYear { get; }
 
-		// ----------------------------------------------------------------------
-		DayOfWeek FiscalFirstDayOfYear { get; }
+    // ----------------------------------------------------------------------
+    FiscalYearAlignment FiscalYearAlignment { get; }
 
-		// ----------------------------------------------------------------------
-		FiscalYearAlignment FiscalYearAlignment { get; }
+    // ----------------------------------------------------------------------
+    FiscalQuarterGrouping FiscalQuarterGrouping { get; }
 
-		// ----------------------------------------------------------------------
-		FiscalQuarterGrouping FiscalQuarterGrouping { get; }
+    // ----------------------------------------------------------------------
+    DayOfWeek FirstDayOfWeek { get; }
 
-		// ----------------------------------------------------------------------
-		DayOfWeek FirstDayOfWeek { get; }
+    // ----------------------------------------------------------------------
+    YearWeekType YearWeekType { get; }
 
-		// ----------------------------------------------------------------------
-		YearWeekType YearWeekType { get; }
+    // ----------------------------------------------------------------------
+    int GetYear(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetYear( DateTime time );
+    // ----------------------------------------------------------------------
+    int GetMonth(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetMonth( DateTime time );
+    // ----------------------------------------------------------------------
+    int GetHour(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetHour( DateTime time );
+    // ----------------------------------------------------------------------
+    int GetMinute(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetMinute( DateTime time );
+    // ----------------------------------------------------------------------
+    int GetDayOfMonth(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetDayOfMonth( DateTime time );
+    // ----------------------------------------------------------------------
+    DayOfWeek GetDayOfWeek(DateTime time);
 
-		// ----------------------------------------------------------------------
-		DayOfWeek GetDayOfWeek( DateTime time );
+    // ----------------------------------------------------------------------
+    int GetDaysInMonth(int year, int month);
 
-		// ----------------------------------------------------------------------
-		int GetDaysInMonth( int year, int month );
+    // ----------------------------------------------------------------------
+    int GetYear(int year, int month);
 
-		// ----------------------------------------------------------------------
-		int GetYear( int year, int month );
+    // ----------------------------------------------------------------------
+    string GetYearName(int year);
 
-		// ----------------------------------------------------------------------
-		string GetYearName( int year );
+    // ----------------------------------------------------------------------
+    string GetHalfyearName(YearHalfyear yearHalfyear);
 
-		// ----------------------------------------------------------------------
-		string GetHalfyearName( YearHalfyear yearHalfyear );
+    // ----------------------------------------------------------------------
+    string GetHalfyearOfYearName(int year, YearHalfyear yearHalfyear);
 
-		// ----------------------------------------------------------------------
-		string GetHalfyearOfYearName( int year, YearHalfyear yearHalfyear );
+    // ----------------------------------------------------------------------
+    string GetQuarterName(YearQuarter yearQuarter);
 
-		// ----------------------------------------------------------------------
-		string GetQuarterName( YearQuarter yearQuarter );
+    // ----------------------------------------------------------------------
+    string GetQuarterOfYearName(int year, YearQuarter yearQuarter);
 
-		// ----------------------------------------------------------------------
-		string GetQuarterOfYearName( int year, YearQuarter yearQuarter );
+    // ----------------------------------------------------------------------
+    string GetMonthName(int month);
 
-		// ----------------------------------------------------------------------
-		string GetMonthName( int month );
+    // ----------------------------------------------------------------------
+    string GetMonthOfYearName(int year, int month);
 
-		// ----------------------------------------------------------------------
-		string GetMonthOfYearName( int year, int month );
+    // ----------------------------------------------------------------------
+    string GetWeekOfYearName(int year, int weekOfYear);
 
-		// ----------------------------------------------------------------------
-		string GetWeekOfYearName( int year, int weekOfYear );
+    // ----------------------------------------------------------------------
+    string GetDayName(DayOfWeek dayOfWeek);
 
-		// ----------------------------------------------------------------------
-		string GetDayName( DayOfWeek dayOfWeek );
+    // ----------------------------------------------------------------------
+    int GetWeekOfYear(DateTime time);
 
-		// ----------------------------------------------------------------------
-		int GetWeekOfYear( DateTime time );
+    // ----------------------------------------------------------------------
+    DateTime GetStartOfYearWeek(int year, int weekOfYear);
 
-		// ----------------------------------------------------------------------
-		DateTime GetStartOfYearWeek( int year, int weekOfYear );
+} // class ITimeCalendar
 
-	} // class ITimeCalendar
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

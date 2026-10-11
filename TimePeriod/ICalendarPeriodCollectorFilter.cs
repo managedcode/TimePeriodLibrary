@@ -8,23 +8,23 @@
 // --------------------------------------------------------------------------
 using System.Collections.Generic;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public interface ICalendarPeriodCollectorFilter : ICalendarVisitorFilter
 {
 
-	// ------------------------------------------------------------------------
-	public interface ICalendarPeriodCollectorFilter : ICalendarVisitorFilter
-	{
+    // ----------------------------------------------------------------------
+    IList<MonthRange> CollectingMonths { get; }
 
-		// ----------------------------------------------------------------------
-		IList<MonthRange> CollectingMonths { get; }
+    // ----------------------------------------------------------------------
+    IList<DayRange> CollectingDays { get; }
 
-		// ----------------------------------------------------------------------
-		IList<DayRange> CollectingDays { get; }
+    // ----------------------------------------------------------------------
+    IList<HourRange> CollectingHours { get; }
 
-		// ----------------------------------------------------------------------
-		IList<HourRange> CollectingHours { get; }
+} // interface ICalendarPeriodCollectorFilter
 
-	} // interface ICalendarPeriodCollectorFilter
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

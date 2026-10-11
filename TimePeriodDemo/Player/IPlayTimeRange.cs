@@ -6,19 +6,19 @@
 // environment: .NET 2.0
 // copyright  : (c) 2011-2012 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
-using Itenso.TimePeriod;
+using ManagedCode.TimePeriodLibrary;
 
-namespace Itenso.TimePeriodDemo.Player
+namespace ManagedCode.TimePeriodDemo.Player;
+
+
+// ------------------------------------------------------------------------
+public interface IPlayTimeRange : ITimePeriod
 {
 
-	// ------------------------------------------------------------------------
-	public interface IPlayTimeRange : ITimePeriod
-	{
+    // ----------------------------------------------------------------------
+    PlayDirection Direction { get; set; }
 
-		// ----------------------------------------------------------------------
-		PlayDirection Direction { get; set; }
+} // interface ITimeRange
 
-	} // interface ITimeRange
-
-} // namespace Itenso.TimePeriodDemo.Player
+// namespace Itenso.TimePeriodDemo.Player
 // -- EOF -------------------------------------------------------------------

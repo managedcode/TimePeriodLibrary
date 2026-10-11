@@ -7,16 +7,16 @@
 // copyright  : (c) 2011-2014 by Itenso GmbH, Switzerland
 // --------------------------------------------------------------------------
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public enum FiscalQuarterGrouping
 {
+    FourFourFiveWeeks = 0,
+    FourFiveFourWeeks = 1,
+    FiveFourFourWeeks = 2,
+} // enum FiscalQuarterGrouping
 
-	// ------------------------------------------------------------------------
-	public enum FiscalQuarterGrouping
-	{
-		FourFourFiveWeeks = 0,
-		FourFiveFourWeeks = 1,
-		FiveFourFourWeeks = 2,
-	} // enum FiscalQuarterGrouping
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

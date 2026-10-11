@@ -8,94 +8,94 @@
 // --------------------------------------------------------------------------
 using System;
 
-namespace Itenso.TimePeriod
+namespace ManagedCode.TimePeriodLibrary;
+
+
+// ------------------------------------------------------------------------
+public sealed class Year : YearTimeRange
 {
 
-	// ------------------------------------------------------------------------
-	public sealed class Year : YearTimeRange
-	{
+    // ----------------------------------------------------------------------
+    public Year() :
+        this(new TimeCalendar())
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year() :
-			this( new TimeCalendar() )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public Year(ITimeCalendar calendar) :
+        this(ClockProxy.Clock.Now, calendar)
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year( ITimeCalendar calendar ) :
-			this( ClockProxy.Clock.Now, calendar )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public Year(DateTime moment) :
+        this(moment, new TimeCalendar())
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year( DateTime moment ) :
-			this( moment, new TimeCalendar() )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public Year(DateTime moment, ITimeCalendar calendar) :
+        this(TimeTool.GetYearOf(calendar.YearBaseMonth, calendar.GetYear(moment), calendar.GetMonth(moment)), calendar)
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year( DateTime moment, ITimeCalendar calendar ) :
-			this( TimeTool.GetYearOf( calendar.YearBaseMonth, calendar.GetYear( moment ), calendar.GetMonth( moment ) ), calendar )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public Year(int year) :
+        this(year, new TimeCalendar())
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year( int year ) :
-			this( year, new TimeCalendar() )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public Year(int year, ITimeCalendar calendar) :
+        base(year, 1, calendar)
+    {
+    } // Year
 
-		// ----------------------------------------------------------------------
-		public Year( int year, ITimeCalendar calendar ) :
-			base( year, 1, calendar )
-		{
-		} // Year
+    // ----------------------------------------------------------------------
+    public int YearValue
+    {
+        get { return Calendar.GetYear(BaseYear, (int)YearBaseMonth); }
+    } // YearValue
 
-		// ----------------------------------------------------------------------
-		public int YearValue
-		{
-			get { return Calendar.GetYear( BaseYear, (int)YearBaseMonth ); }
-		} // YearValue
+    // ----------------------------------------------------------------------
+    public string YearName
+    {
+        get { return StartYearName; }
+    } // YearName
 
-		// ----------------------------------------------------------------------
-		public string YearName
-		{
-			get { return StartYearName; }
-		} // YearName
+    // ----------------------------------------------------------------------
+    public bool IsCalendarYear
+    {
+        get { return YearBaseMonth == TimeSpec.CalendarYearStartMonth; }
+    } // IsCalendarYearPeriod
 
-		// ----------------------------------------------------------------------
-		public bool IsCalendarYear
-		{
-			get { return YearBaseMonth == TimeSpec.CalendarYearStartMonth; }
-		} // IsCalendarYearPeriod
+    // ----------------------------------------------------------------------
+    public Year GetPreviousYear()
+    {
+        return AddYears(-1);
+    } // GetPreviousYear
 
-		// ----------------------------------------------------------------------
-		public Year GetPreviousYear()
-		{
-			return AddYears( -1 );
-		} // GetPreviousYear
+    // ----------------------------------------------------------------------
+    public Year GetNextYear()
+    {
+        return AddYears(1);
+    } // GetNextYear
 
-		// ----------------------------------------------------------------------
-		public Year GetNextYear()
-		{
-			return AddYears( 1 );
-		} // GetNextYear
+    // ----------------------------------------------------------------------
+    public Year AddYears(int count)
+    {
+        DateTime startDate = new DateTime(BaseYear, (int)YearBaseMonth, 1);
+        return new Year(startDate.AddYears(count), Calendar);
+    } // AddYears
 
-		// ----------------------------------------------------------------------
-		public Year AddYears( int count )
-		{
-			DateTime startDate = new DateTime( BaseYear, (int)YearBaseMonth, 1 );
-			return new Year( startDate.AddYears( count ), Calendar );
-		} // AddYears
+    // ----------------------------------------------------------------------
+    protected override string Format(ITimeFormatter formatter)
+    {
+        return formatter.GetCalendarPeriod(YearName,
+            formatter.GetShortDate(Start), formatter.GetShortDate(End), Duration);
+    } // Format
 
-		// ----------------------------------------------------------------------
-		protected override string Format( ITimeFormatter formatter )
-		{
-			return formatter.GetCalendarPeriod( YearName,
-				formatter.GetShortDate( Start ), formatter.GetShortDate( End ), Duration );
-		} // Format
+} // class Year
 
-	} // class Year
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------
